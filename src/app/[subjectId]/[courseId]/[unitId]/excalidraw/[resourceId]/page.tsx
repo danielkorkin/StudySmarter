@@ -1,12 +1,12 @@
-// app/[subjectId]/[courseId]/[unitId]/excalidraw/[resourceId]/page.tsx
+// src/app/[subjectId]/[courseId]/[unitId]/excalidraw/[resourceId]/page.tsx
 "use client";
 
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import fs from "fs";
-import path from "path";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
-const Excalidraw = dynamic(
-	() => import("@excalidraw/excalidraw").then((mod) => mod.Excalidraw),
+const ExcalidrawWrapper = dynamic(
+	() => import("@/components/ExcalidrawWrapper"),
 	{ ssr: false }
 );
 
@@ -20,22 +20,47 @@ interface Props {
 }
 
 export default function ExcalidrawResourcePage({ params }: Props) {
+	const [data, setData] = useState<any>(null);
+	const [error, setError] = useState<string | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
+
 	const { subjectId, courseId, unitId, resourceId } = params;
 
-	const excalidrawPath = path.join(
-		process.cwd(),
-		"content",
-		subjectId,
-		courseId,
-		unitId,
-		"resources",
-		`excalidraw_${resourceId}.excalidraw`
-	);
-	const excalidrawData = JSON.parse(fs.readFileSync(excalidrawPath, "utf-8"));
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const filePath = `${subjectId}/${courseId}/${unitId}/resources/excalidraw_${resourceId}.excalidraw`;
+				const response = await fetch(
+					`/api/excalidraw?path=${encodeURIComponent(filePath)}`
+				);
+				if (!response.ok) {
+					throw new Error("Failed to load Excalidraw data");
+				}
+				const json = await response.json();
+				setData(json);
+			} catch (err) {
+				setError(
+					err instanceof Error ? err.message : "An error occurred"
+				);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		fetchData();
+	}, [subjectId, courseId, unitId, resourceId]);
+
+	if (isLoading) {
+		return <div className="p-4">Loading...</div>;
+	}
+
+	if (error) {
+		return <div className="p-4 text-red-500">Error: {error}</div>;
+	}
 
 	return (
-		<div className="w-full h-screen">
-			<Excalidraw initialData={excalidrawData} />
-		</div>
+		<ErrorBoundary>
+			<ExcalidrawWrapper initialData={data} />
+		</ErrorBoundary>
 	);
 }
