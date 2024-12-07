@@ -13,6 +13,13 @@ interface Props {
 	}>;
 }
 
+interface Resource {
+	id: string;
+	type: string;
+	title: string;
+	path: string;
+}
+
 interface PathValidationResult {
 	path: string;
 	redirect?: string;
@@ -26,19 +33,16 @@ function validatePath(
 	const basePath = path.join(process.cwd(), "content");
 	const subjectPath = path.join(basePath, subjectId);
 
-	// Check if subject exists
 	if (!fs.existsSync(subjectPath)) {
 		return null;
 	}
 
-	// If only validating subject
 	if (!courseId) {
 		return { path: subjectPath };
 	}
 
 	const coursePath = path.join(subjectPath, courseId);
 	if (!fs.existsSync(coursePath)) {
-		// Try to find correct course
 		const courses = fs
 			.readdirSync(subjectPath)
 			.filter((dir) =>
@@ -58,14 +62,12 @@ function validatePath(
 		return null;
 	}
 
-	// If only validating up to course
 	if (!unitId) {
 		return { path: coursePath };
 	}
 
 	const unitPath = path.join(coursePath, unitId);
 	if (!fs.existsSync(unitPath)) {
-		// Try to find correct unit
 		const units = fs
 			.readdirSync(coursePath)
 			.filter((dir) =>
@@ -86,6 +88,63 @@ function validatePath(
 	return { path: unitPath };
 }
 
+// src/app/[subjectId]/[courseId]/[unitId]/page.tsx
+function getResources(
+	resourcesDir: string,
+	subjectId: string,
+	courseId: string,
+	unitId: string
+): Resource[] {
+	if (!fs.existsSync(resourcesDir)) {
+		return [];
+	}
+
+	// Get content directory resources
+	const contentResources = fs.readdirSync(resourcesDir).filter((file) => {
+		const filePath = path.join(resourcesDir, file);
+		return fs.statSync(filePath).isFile();
+	});
+
+	// Check public directory for PDF files
+	const publicPdfDir = path.join(
+		process.cwd(),
+		"public",
+		"resources",
+		subjectId,
+		courseId,
+		unitId
+	);
+	let pdfFiles: string[] = [];
+	if (fs.existsSync(publicPdfDir)) {
+		pdfFiles = fs
+			.readdirSync(publicPdfDir)
+			.filter((file) => file.startsWith("pdf_") && file.endsWith(".pdf"))
+			.map((file) => `pdf_${file.slice(4)}`); // Convert to same format as other resources
+	}
+
+	// Combine and process all resources
+	const allFiles = [...contentResources, ...pdfFiles];
+
+	return allFiles.map((file) => {
+		const [type, ...idParts] = file.split("_");
+		const id = idParts.join("_").replace(/\.[^/.]+$/, "");
+
+		let resourcePath = "";
+		if (type === "pdf") {
+			resourcePath = `/resources/${subjectId}/${courseId}/${unitId}/${file}`;
+		}
+
+		return {
+			id,
+			type,
+			title: id
+				.replace(/-/g, " ")
+				.replace(/\b\w/g, (l) => l.toUpperCase()),
+			path: resourcePath,
+		};
+	});
+}
+
 export default async function UnitPage(props: Props) {
 	const params = await props.params;
 	const { subjectId, courseId, unitId } = params;
@@ -93,7 +152,7 @@ export default async function UnitPage(props: Props) {
 	const validation = validatePath(subjectId, courseId, unitId);
 
 	if (!validation) {
-		redirect("/"); // Redirect to home if path is invalid
+		redirect("/");
 	}
 
 	if (validation.redirect) {
@@ -102,18 +161,20 @@ export default async function UnitPage(props: Props) {
 
 	try {
 		const summaryPath = path.join(validation.path, "summary.md");
+		if (!fs.existsSync(summaryPath)) {
+			redirect("/");
+		}
+
 		const fileContent = fs.readFileSync(summaryPath, "utf-8");
 		const { data, content } = matter(fileContent);
 
-		const resourcesPath = path.join(validation.path, "resources");
-		const resourceFiles = fs.existsSync(resourcesPath)
-			? fs.readdirSync(resourcesPath)
-			: [];
-
-		const resources = resourceFiles.map((file) => {
-			const [type, id] = file.split("_");
-			return { type, id: id.replace(/\.[^/.]+$/, "") };
-		});
+		const resourcesDir = path.join(validation.path, "resources");
+		const resources = getResources(
+			resourcesDir,
+			subjectId,
+			courseId,
+			unitId
+		);
 
 		return (
 			<div className="prose mx-auto p-4">
@@ -122,11 +183,11 @@ export default async function UnitPage(props: Props) {
 				<h2>Resources</h2>
 				<ul>
 					{resources.map((resource) => (
-						<li key={resource.id}>
+						<li key={`${resource.type}-${resource.id}`}>
 							<a
 								href={`/${subjectId}/${courseId}/${unitId}/${resource.type}/${resource.id}`}
 							>
-								{resource.type.toUpperCase()} - {resource.id}
+								{resource.type.toUpperCase()} - {resource.title}
 							</a>
 						</li>
 					))}
