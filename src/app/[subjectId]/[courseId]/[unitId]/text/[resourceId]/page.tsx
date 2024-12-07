@@ -4,18 +4,19 @@ import path from "path";
 import ReactMarkdown from "react-markdown";
 
 interface Props {
-	params: {
+	params: Promise<{
 		subjectId: string;
 		courseId: string;
 		unitId: string;
 		resourceId: string;
-	};
+	}>;
 }
 
-export default function TextResourcePage({ params }: Props) {
-	const { subjectId, courseId, unitId, resourceId } = params;
+export default async function TextResourcePage(props: Props) {
+    const params = await props.params;
+    const { subjectId, courseId, unitId, resourceId } = params;
 
-	const resourcePath = path.join(
+    const resourcePath = path.join(
 		process.cwd(),
 		"content",
 		subjectId,
@@ -24,9 +25,9 @@ export default function TextResourcePage({ params }: Props) {
 		"resources",
 		`text_${resourceId}.md`
 	);
-	const content = fs.readFileSync(resourcePath, "utf-8");
+    const content = fs.readFileSync(resourcePath, "utf-8");
 
-	return (
+    return (
 		<div className="prose mx-auto p-4">
 			<ReactMarkdown>{content}</ReactMarkdown>
 		</div>

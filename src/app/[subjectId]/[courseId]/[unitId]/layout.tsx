@@ -1,15 +1,20 @@
 // src/app/[subjectId]/[courseId]/[unitId]/layout.tsx
 import Link from "next/link";
 
-export default function UnitLayout({
-	children,
-	params,
-}: {
-	children: React.ReactNode;
-	params: { subjectId: string; courseId: string; unitId: string };
-}) {
-	const { subjectId, courseId, unitId } = params;
-	return (
+export default async function UnitLayout(
+    props: {
+        children: React.ReactNode;
+        params: Promise<{ subjectId: string; courseId: string; unitId: string }>;
+    }
+) {
+    const params = await props.params;
+
+    const {
+        children
+    } = props;
+
+    const { subjectId, courseId, unitId } = params;
+    return (
 		<div>
 			<nav className="bg-gray-200 p-4">
 				<Link href="/">Home</Link> /{" "}

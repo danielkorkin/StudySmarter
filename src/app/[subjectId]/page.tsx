@@ -10,20 +10,21 @@ interface Course {
 }
 
 interface Props {
-	params: {
+	params: Promise<{
 		subjectId: string;
-	};
+	}>;
 }
 
-export default function SubjectPage({ params }: Props) {
-	const { subjectId } = params;
-	const subjectPath = path.join(process.cwd(), "content", subjectId);
-	const courses = fs.readdirSync(subjectPath).filter((file) => {
+export default async function SubjectPage(props: Props) {
+    const params = await props.params;
+    const { subjectId } = params;
+    const subjectPath = path.join(process.cwd(), "content", subjectId);
+    const courses = fs.readdirSync(subjectPath).filter((file) => {
 		const stat = fs.statSync(path.join(subjectPath, file));
 		return stat.isDirectory();
 	});
 
-	const courseData: Course[] = courses.map((courseId) => {
+    const courseData: Course[] = courses.map((courseId) => {
 		const summaryPath = path.join(subjectPath, courseId, "summary.md");
 		let title = courseId;
 		if (fs.existsSync(summaryPath)) {
@@ -34,7 +35,7 @@ export default function SubjectPage({ params }: Props) {
 		return { id: courseId, title };
 	});
 
-	return (
+    return (
 		<div className="prose mx-auto p-4">
 			<h1>Courses for {subjectId}</h1>
 			<ul>

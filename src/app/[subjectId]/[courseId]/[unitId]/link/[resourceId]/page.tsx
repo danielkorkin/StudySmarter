@@ -4,18 +4,19 @@ import path from "path";
 import { redirect } from "next/navigation";
 
 interface Props {
-	params: {
+	params: Promise<{
 		subjectId: string;
 		courseId: string;
 		unitId: string;
 		resourceId: string;
-	};
+	}>;
 }
 
-export default function LinkResourcePage({ params }: Props) {
-	const { subjectId, courseId, unitId, resourceId } = params;
+export default async function LinkResourcePage(props: Props) {
+    const params = await props.params;
+    const { subjectId, courseId, unitId, resourceId } = params;
 
-	const linkPath = path.join(
+    const linkPath = path.join(
 		process.cwd(),
 		"content",
 		subjectId,
@@ -24,7 +25,7 @@ export default function LinkResourcePage({ params }: Props) {
 		"resources",
 		`link_${resourceId}.txt`
 	);
-	const url = fs.readFileSync(linkPath, "utf-8").trim();
+    const url = fs.readFileSync(linkPath, "utf-8").trim();
 
-	redirect(url);
+    redirect(url);
 }

@@ -1,32 +1,36 @@
 // src/app/[subjectId]/[courseId]/[unitId]/excalidraw/[resourceId]/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import dynamic from "next/dynamic";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 const ExcalidrawWrapper = dynamic(
 	() => import("@/components/ExcalidrawWrapper"),
-	{ ssr: false }
+	{
+		ssr: false,
+		loading: () => <div className="p-4">Loading Excalidraw...</div>,
+	}
 );
 
 interface Props {
-	params: {
+	params: Promise<{
 		subjectId: string;
 		courseId: string;
 		unitId: string;
 		resourceId: string;
-	};
+	}>;
 }
 
-export default function ExcalidrawResourcePage({ params }: Props) {
-	const [data, setData] = useState<any>(null);
-	const [error, setError] = useState<string | null>(null);
-	const [isLoading, setIsLoading] = useState(true);
+export default function ExcalidrawResourcePage(props: Props) {
+    const params = use(props.params);
+    const [data, setData] = useState<any>(null);
+    const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
-	const { subjectId, courseId, unitId, resourceId } = params;
+    const { subjectId, courseId, unitId, resourceId } = params;
 
-	useEffect(() => {
+    useEffect(() => {
 		const fetchData = async () => {
 			try {
 				const filePath = `${subjectId}/${courseId}/${unitId}/resources/excalidraw_${resourceId}.excalidraw`;
@@ -50,17 +54,13 @@ export default function ExcalidrawResourcePage({ params }: Props) {
 		fetchData();
 	}, [subjectId, courseId, unitId, resourceId]);
 
-	if (isLoading) {
-		return <div className="p-4">Loading...</div>;
+    if (isLoading) {
+		return <div className="p-4">Loading data...</div>;
 	}
 
-	if (error) {
+    if (error) {
 		return <div className="p-4 text-red-500">Error: {error}</div>;
 	}
 
-	return (
-		<ErrorBoundary>
-			<ExcalidrawWrapper initialData={data} />
-		</ErrorBoundary>
-	);
+    return data ? <ExcalidrawWrapper initialData={data} /> : null;
 }

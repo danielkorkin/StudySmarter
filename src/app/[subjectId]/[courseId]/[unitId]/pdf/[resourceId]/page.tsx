@@ -3,18 +3,19 @@ import path from "path";
 import fs from "fs";
 
 interface Props {
-	params: {
+	params: Promise<{
 		subjectId: string;
 		courseId: string;
 		unitId: string;
 		resourceId: string;
-	};
+	}>;
 }
 
-export default function PDFResourcePage({ params }: Props) {
-	const { subjectId, courseId, unitId, resourceId } = params;
+export default async function PDFResourcePage(props: Props) {
+    const params = await props.params;
+    const { subjectId, courseId, unitId, resourceId } = params;
 
-	const pdfPath = path.join(
+    const pdfPath = path.join(
 		"/resources",
 		subjectId,
 		courseId,
@@ -22,7 +23,7 @@ export default function PDFResourcePage({ params }: Props) {
 		`pdf_${resourceId}.pdf`
 	);
 
-	return (
+    return (
 		<div className="w-full h-screen">
 			<object
 				data={pdfPath}
