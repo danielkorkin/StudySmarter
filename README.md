@@ -24,8 +24,8 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 To learn more about Next.js, take a look at the following resources:
 
--   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
--   [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
@@ -54,9 +54,9 @@ unitId: "unit1"
 
 Welcome to Unit 1! This unit covers:
 
--   Basic algebraic expressions
--   Solving linear equations
--   Working with variables and constants
+- Basic algebraic expressions
+- Solving linear equations
+- Working with variables and constants
 
 Key concepts you'll learn:
 
@@ -80,9 +80,9 @@ Example text resource:
 
 ## Key Points
 
--   An equation is an expression with an equals sign
--   Variables represent unknown values
--   Solve by isolating the variable
+- An equation is an expression with an equals sign
+- Variables represent unknown values
+- Solve by isolating the variable
 
 ## Examples
 
@@ -131,13 +131,13 @@ Example structure:
 
 ## File Naming Conventions
 
--   Use lowercase letters
--   Use hyphens for spaces in names
--   Prefix files with resource types
-    -   `text_`
-    -   `pdf_`
-    -   `link_`
-    -   `excalidraw_`
+- Use lowercase letters
+- Use hyphens for spaces in names
+- Prefix files with resource types
+    - `text_`
+    - `pdf_`
+    - `link_`
+    - `excalidraw_`
 
 ## Example Directory Structure
 
