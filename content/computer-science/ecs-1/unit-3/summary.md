@@ -3,6 +3,7 @@ title: "Unit 3: Logic Gates & Binary"
 subjectId: "computer-science"
 courseId: "ecs-1"
 unitId: "unit-3"
+inProgress: true
 ---
 
 ## Unit Summary: Binary Systems and Logic Gates

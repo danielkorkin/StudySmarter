@@ -16,23 +16,17 @@ interface Props {
 	}>;
 }
 
-interface Resource {
-	id: string;
-	type: string;
+interface UnitContent {
 	title: string;
-	path: string;
-}
-
-interface PathValidationResult {
-	path: string;
-	redirect?: string;
+	content: string;
+	inProgress?: boolean;
 }
 
 async function getUnitContent(
 	subjectId: string,
 	courseId: string,
 	unitId: string,
-) {
+): Promise<UnitContent> {
 	const mdPath = path.join(
 		process.cwd(),
 		"content",
@@ -52,6 +46,7 @@ async function getUnitContent(
 	return {
 		title: data.title,
 		content: content,
+		inProgress: data.inProgress || false, // Add this line
 	};
 }
 
@@ -132,8 +127,11 @@ export default async function UnitPage(props: Props) {
 		return (
 			<div className="space-y-4">
 				<Card>
-					<CardHeader>
+					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 						<CardTitle>{unitContent.title}</CardTitle>
+						{unitContent.inProgress && (
+							<Badge variant="secondary">In Progress</Badge>
+						)}
 					</CardHeader>
 					<CardContent className="prose dark:prose-invert max-w-none">
 						<ReactMarkdown>{unitContent.content}</ReactMarkdown>
