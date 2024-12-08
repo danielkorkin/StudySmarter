@@ -9,7 +9,7 @@ const Excalidraw = dynamic(
 	{
 		ssr: false,
 		loading: () => <div className="p-4">Loading Excalidraw...</div>,
-	}
+	},
 );
 
 interface Props {

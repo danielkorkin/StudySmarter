@@ -10,7 +10,7 @@ const ExcalidrawWrapper = dynamic(
 	{
 		ssr: false,
 		loading: () => <div className="p-4">Loading Excalidraw...</div>,
-	}
+	},
 );
 
 interface Props {
@@ -23,19 +23,19 @@ interface Props {
 }
 
 export default function ExcalidrawResourcePage(props: Props) {
-    const params = use(props.params);
-    const [data, setData] = useState<any>(null);
-    const [error, setError] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+	const params = use(props.params);
+	const [data, setData] = useState<any>(null);
+	const [error, setError] = useState<string | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
 
-    const { subjectId, courseId, unitId, resourceId } = params;
+	const { subjectId, courseId, unitId, resourceId } = params;
 
-    useEffect(() => {
+	useEffect(() => {
 		const fetchData = async () => {
 			try {
 				const filePath = `${subjectId}/${courseId}/${unitId}/resources/excalidraw_${resourceId}.excalidraw`;
 				const response = await fetch(
-					`/api/excalidraw?path=${encodeURIComponent(filePath)}`
+					`/api/excalidraw?path=${encodeURIComponent(filePath)}`,
 				);
 				if (!response.ok) {
 					throw new Error("Failed to load Excalidraw data");
@@ -44,7 +44,7 @@ export default function ExcalidrawResourcePage(props: Props) {
 				setData(json);
 			} catch (err) {
 				setError(
-					err instanceof Error ? err.message : "An error occurred"
+					err instanceof Error ? err.message : "An error occurred",
 				);
 			} finally {
 				setIsLoading(false);
@@ -54,13 +54,13 @@ export default function ExcalidrawResourcePage(props: Props) {
 		fetchData();
 	}, [subjectId, courseId, unitId, resourceId]);
 
-    if (isLoading) {
+	if (isLoading) {
 		return <div className="p-4">Loading data...</div>;
 	}
 
-    if (error) {
+	if (error) {
 		return <div className="p-4 text-red-500">Error: {error}</div>;
 	}
 
-    return data ? <ExcalidrawWrapper initialData={data} /> : null;
+	return data ? <ExcalidrawWrapper initialData={data} /> : null;
 }

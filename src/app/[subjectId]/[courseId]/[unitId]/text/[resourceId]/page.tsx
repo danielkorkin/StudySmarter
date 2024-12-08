@@ -13,21 +13,21 @@ interface Props {
 }
 
 export default async function TextResourcePage(props: Props) {
-    const params = await props.params;
-    const { subjectId, courseId, unitId, resourceId } = params;
+	const params = await props.params;
+	const { subjectId, courseId, unitId, resourceId } = params;
 
-    const resourcePath = path.join(
+	const resourcePath = path.join(
 		process.cwd(),
 		"content",
 		subjectId,
 		courseId,
 		unitId,
 		"resources",
-		`text_${resourceId}.md`
+		`text_${resourceId}.md`,
 	);
-    const content = fs.readFileSync(resourcePath, "utf-8");
+	const content = fs.readFileSync(resourcePath, "utf-8");
 
-    return (
+	return (
 		<div className="prose mx-auto p-4">
 			<ReactMarkdown>{content}</ReactMarkdown>
 		</div>

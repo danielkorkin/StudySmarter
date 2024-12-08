@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
 	if (!filePathParam) {
 		return NextResponse.json(
 			{ error: "Path is required" },
-			{ status: 400 }
+			{ status: 400 },
 		);
 	}
 
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
 		console.error(error);
 		return NextResponse.json(
 			{ error: "Failed to read file" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
