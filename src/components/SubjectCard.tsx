@@ -13,7 +13,9 @@ export function SubjectCard({ subject }: SubjectCardProps) {
 		<Link href={`/${subject.id}`}>
 			<Card className="hover:shadow-lg transition-shadow">
 				<CardHeader>
-					<CardTitle className="capitalize">{subject.title}</CardTitle>
+					<CardTitle className="capitalize">
+						{subject.title}
+					</CardTitle>
 				</CardHeader>
 			</Card>
 		</Link>

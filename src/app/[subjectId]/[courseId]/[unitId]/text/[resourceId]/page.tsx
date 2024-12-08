@@ -15,7 +15,7 @@ interface Props {
 }
 
 export default async function TextResourcePage(props: Props) {
-	const { subjectId, courseId, unitId, resourceId } = (await props.params);
+	const { subjectId, courseId, unitId, resourceId } = await props.params;
 
 	const filePath = path.join(
 		process.cwd(),
@@ -24,7 +24,7 @@ export default async function TextResourcePage(props: Props) {
 		courseId,
 		unitId,
 		"resources",
-		`text_${resourceId}.md`
+		`text_${resourceId}.md`,
 	);
 
 	if (!fs.existsSync(filePath)) {
@@ -34,17 +34,17 @@ export default async function TextResourcePage(props: Props) {
 	const content = fs.readFileSync(filePath, "utf8");
 
 	return (
-        (<Card>
-            <CardHeader>
+		<Card>
+			<CardHeader>
 				<CardTitle>
 					{resourceId
 						.replace(/-/g, " ")
 						.replace(/\b\w/g, (l) => l.toUpperCase())}
 				</CardTitle>
 			</CardHeader>
-            <CardContent className="prose dark:prose-invert max-w-none">
+			<CardContent className="prose dark:prose-invert max-w-none">
 				<ReactMarkdown>{content}</ReactMarkdown>
 			</CardContent>
-        </Card>)
-    );
+		</Card>
+	);
 }

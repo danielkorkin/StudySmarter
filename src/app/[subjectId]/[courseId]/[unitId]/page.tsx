@@ -31,7 +31,7 @@ interface PathValidationResult {
 async function getUnitContent(
 	subjectId: string,
 	courseId: string,
-	unitId: string
+	unitId: string,
 ) {
 	const mdPath = path.join(
 		process.cwd(),
@@ -39,7 +39,7 @@ async function getUnitContent(
 		subjectId,
 		courseId,
 		unitId,
-		"summary.md"
+		"summary.md",
 	);
 
 	if (!fs.existsSync(mdPath)) {
@@ -59,7 +59,7 @@ function getResources(
 	resourcesDir: string,
 	subjectId: string,
 	courseId: string,
-	unitId: string
+	unitId: string,
 ): Resource[] {
 	if (!fs.existsSync(resourcesDir)) {
 		return [];
@@ -76,7 +76,7 @@ function getResources(
 		"resources",
 		subjectId,
 		courseId,
-		unitId
+		unitId,
 	);
 
 	let pdfFiles: string[] = [];
@@ -110,7 +110,7 @@ function getResources(
 }
 
 export default async function UnitPage(props: Props) {
-	const { subjectId, courseId, unitId } = (await props.params);
+	const { subjectId, courseId, unitId } = await props.params;
 
 	try {
 		const unitContent = await getUnitContent(subjectId, courseId, unitId);
@@ -120,13 +120,13 @@ export default async function UnitPage(props: Props) {
 			subjectId,
 			courseId,
 			unitId,
-			"resources"
+			"resources",
 		);
 		const resources = getResources(
 			resourcesDir,
 			subjectId,
 			courseId,
-			unitId
+			unitId,
 		);
 
 		return (
