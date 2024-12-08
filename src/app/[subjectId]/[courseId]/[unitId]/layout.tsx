@@ -1,5 +1,5 @@
-// src/app/[subjectId]/[courseId]/[unitId]/layout.tsx
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 
 export default async function UnitLayout(props: {
 	children: React.ReactNode;
@@ -11,14 +11,8 @@ export default async function UnitLayout(props: {
 
 	const { subjectId, courseId, unitId } = params;
 	return (
-		<div>
-			<nav className="bg-gray-200 p-4">
-				<Link href="/">Home</Link> /{" "}
-				<Link href={`/${subjectId}`}>{subjectId}</Link> /{" "}
-				<Link href={`/${subjectId}/${courseId}`}>{courseId}</Link> /{" "}
-				<span className="font-bold">{unitId}</span>
-			</nav>
-			{children}
+		<div className="space-y-6">
+			<main>{children}</main>
 		</div>
 	);
 }

@@ -1,8 +1,8 @@
-// src/app/[subjectId]/page.tsx
 import fs from "fs";
 import path from "path";
 import Link from "next/link";
 import matter from "gray-matter";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface Course {
 	id: string;
@@ -36,17 +36,23 @@ export default async function SubjectPage(props: Props) {
 	});
 
 	return (
-		<div className="prose mx-auto p-4">
-			<h1>Courses for {subjectId}</h1>
-			<ul>
+		<div className="space-y-6">
+			<h1 className="text-3xl font-bold">
+				Courses for <span className="capitalize">{subjectId}</span>
+			</h1>
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{courseData.map((course) => (
-					<li key={course.id}>
-						<Link href={`/${subjectId}/${course.id}`}>
-							{course.title}
-						</Link>
-					</li>
+					<Link key={course.id} href={`/${subjectId}/${course.id}`}>
+						<Card className="hover:bg-muted/50 transition-colors">
+							<CardHeader>
+								<CardTitle className="capitalize">
+									{course.title}
+								</CardTitle>
+							</CardHeader>
+						</Card>
+					</Link>
 				))}
-			</ul>
+			</div>
 		</div>
 	);
 }

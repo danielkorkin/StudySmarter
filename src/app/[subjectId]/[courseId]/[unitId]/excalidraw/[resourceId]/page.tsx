@@ -1,15 +1,15 @@
-// src/app/[subjectId]/[courseId]/[unitId]/excalidraw/[resourceId]/page.tsx
 "use client";
 
 import { useEffect, useState, use } from "react";
 import dynamic from "next/dynamic";
-import ErrorBoundary from "@/components/ErrorBoundary";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ExcalidrawWrapper = dynamic(
 	() => import("@/components/ExcalidrawWrapper"),
 	{
 		ssr: false,
-		loading: () => <div className="p-4">Loading Excalidraw...</div>,
+		loading: () => <Skeleton className="w-full h-[600px]" />,
 	},
 );
 
@@ -54,13 +54,22 @@ export default function ExcalidrawResourcePage(props: Props) {
 		fetchData();
 	}, [subjectId, courseId, unitId, resourceId]);
 
-	if (isLoading) {
-		return <div className="p-4">Loading data...</div>;
-	}
-
-	if (error) {
-		return <div className="p-4 text-red-500">Error: {error}</div>;
-	}
-
-	return data ? <ExcalidrawWrapper initialData={data} /> : null;
+	return (
+		<Card className="max-w-4xl mx-auto">
+			<CardHeader>
+				<CardTitle className="capitalize">
+					{resourceId.replace(/-/g, " ")}
+				</CardTitle>
+			</CardHeader>
+			<CardContent>
+				{isLoading ? (
+					<Skeleton className="w-full h-[600px]" />
+				) : error ? (
+					<div className="p-4 text-red-500">Error: {error}</div>
+				) : (
+					data && <ExcalidrawWrapper initialData={data} />
+				)}
+			</CardContent>
+		</Card>
+	);
 }

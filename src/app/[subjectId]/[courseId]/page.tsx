@@ -1,8 +1,8 @@
-// src/app/[subjectId]/[courseId]/page.tsx
 import fs from "fs";
 import path from "path";
 import Link from "next/link";
 import matter from "gray-matter";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface Unit {
 	id: string;
@@ -37,17 +37,24 @@ export default async function CoursePage(props: Props) {
 	});
 
 	return (
-		<div className="prose mx-auto p-4">
-			<h1>Units for {courseId}</h1>
-			<ul>
+		<div className="space-y-6">
+			<h1 className="text-3xl font-bold">
+				Units for <span className="capitalize">{courseId}</span>
+			</h1>
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{unitData.map((unit) => (
-					<li key={unit.id}>
-						<Link href={`/${subjectId}/${courseId}/${unit.id}`}>
-							{unit.title}
-						</Link>
-					</li>
+					<Link
+						key={unit.id}
+						href={`/${subjectId}/${courseId}/${unit.id}`}
+					>
+						<Card className="hover:bg-muted/50 transition-colors">
+							<CardHeader>
+								<CardTitle>{unit.title}</CardTitle>
+							</CardHeader>
+						</Card>
+					</Link>
 				))}
-			</ul>
+			</div>
 		</div>
 	);
 }
