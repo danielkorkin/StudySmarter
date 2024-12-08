@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import Script from "next/script";
 
 export const metadata: Metadata = {
 	title: "StudySmarter",
@@ -28,6 +29,7 @@ export default function RootLayout({
 					</main>
 				</ThemeProvider>
 			</body>
+			<Script src="https://scripts.simpleanalyticscdn.com/latest.js" data-collect-dnt="true" />
 		</html>
 	);
 }
