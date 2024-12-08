@@ -3,6 +3,7 @@ import path from "path";
 import Link from "next/link";
 import matter from "gray-matter";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatTitle } from "@/lib/utils";
 
 interface Course {
 	id: string;
@@ -38,7 +39,7 @@ export default async function SubjectPage(props: Props) {
 	return (
 		<div className="space-y-6">
 			<h1 className="text-3xl font-bold">
-				Courses for <span className="capitalize">{subjectId}</span>
+				Courses for <span className="capitalize">{formatTitle(subjectId)}</span>
 			</h1>
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{courseData.map((course) => (
@@ -46,7 +47,7 @@ export default async function SubjectPage(props: Props) {
 						<Card className="hover:bg-muted/50 transition-colors">
 							<CardHeader>
 								<CardTitle className="capitalize">
-									{course.title}
+									{formatTitle(course.title)}
 								</CardTitle>
 							</CardHeader>
 						</Card>

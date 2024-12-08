@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatTitle } from "@/lib/utils";
 
 interface SubjectCardProps {
 	subject: {
@@ -14,7 +15,7 @@ export function SubjectCard({ subject }: SubjectCardProps) {
 			<Card className="hover:shadow-lg transition-shadow">
 				<CardHeader>
 					<CardTitle className="capitalize">
-						{subject.title}
+						{formatTitle(subject.title)}
 					</CardTitle>
 				</CardHeader>
 			</Card>
