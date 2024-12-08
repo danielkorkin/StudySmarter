@@ -2,14 +2,21 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import type { ExcalidrawProps } from "@excalidraw/excalidraw/types/types";
+// @ts-expect-error - Types are not properly exposed in @excalidraw/excalidraw package.
+// This is a known issue with the package's type definitions. The types exist at runtime
+// but TypeScript cannot find them at compile time.
+import { ExcalidrawProps } from "@excalidraw/excalidraw/dist/excalidraw/types";
+import type { ComponentType } from "react";
 
 const Excalidraw = dynamic(
-	async () => (await import("@excalidraw/excalidraw")).Excalidraw,
+	() =>
+		import("@excalidraw/excalidraw").then(
+			(mod) => mod.Excalidraw as ComponentType<ExcalidrawProps>
+		),
 	{
 		ssr: false,
 		loading: () => <div className="p-4">Loading Excalidraw...</div>,
-	},
+	}
 );
 
 interface Props {

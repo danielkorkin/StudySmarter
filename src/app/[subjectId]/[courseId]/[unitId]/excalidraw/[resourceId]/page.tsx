@@ -24,6 +24,7 @@ interface Props {
 
 export default function ExcalidrawResourcePage(props: Props) {
 	const params = use(props.params);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const [data, setData] = useState<any>(null);
 	const [error, setError] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(true);

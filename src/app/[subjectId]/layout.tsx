@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
 import "@excalidraw/excalidraw/index.css";
 
 export default async function SubjectLayout(props: {
