@@ -1,8 +1,7 @@
-// src/app/page.tsx
 import fs from "fs";
 import path from "path";
-import Link from "next/link";
 import matter from "gray-matter";
+import { SubjectCard } from "@/components/SubjectCard";
 
 interface Subject {
 	id: string;
@@ -28,15 +27,13 @@ export default function HomePage() {
 	});
 
 	return (
-		<div className="prose mx-auto p-4">
-			<h1>Subjects</h1>
-			<ul>
+		<div className="space-y-8">
+			<h1 className="text-4xl font-bold">Subjects</h1>
+			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 				{subjectData.map((subject) => (
-					<li key={subject.id}>
-						<Link href={`/${subject.id}`}>{subject.title}</Link>
-					</li>
+					<SubjectCard key={subject.id} subject={subject} />
 				))}
-			</ul>
+			</div>
 		</div>
 	);
 }

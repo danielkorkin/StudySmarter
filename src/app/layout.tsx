@@ -1,12 +1,11 @@
-// src/app/layout.tsx
 import type { Metadata } from "next";
-import Link from "next/link";
 import "./globals.css";
-import "@excalidraw/excalidraw/index.css";
+import Navbar from "@/components/Navbar";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
-	title: "Study Notes App",
-	description: "An app to display study notes",
+	title: "StudySmarter",
+	description: "A place with notes for studying",
 };
 
 export default function RootLayout({
@@ -15,14 +14,19 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en">
+		<html lang="en" suppressHydrationWarning>
 			<body>
-				<header className="bg-gray-800 text-white p-4">
-					<Link href="/">
-						<h1 className="text-2xl font-bold">Study Notes App</h1>
-					</Link>
-				</header>
-				<main>{children}</main>
+				<ThemeProvider
+					attribute="class"
+					defaultTheme="light"
+					enableSystem
+					disableTransitionOnChange
+				>
+					<Navbar />
+					<main className="container mx-auto px-4 py-8">
+						{children}
+					</main>
+				</ThemeProvider>
 			</body>
 		</html>
 	);
