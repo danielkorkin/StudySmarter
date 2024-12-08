@@ -16,15 +16,15 @@ interface Props {
 }
 
 export default async function SubjectPage(props: Props) {
-    const params = await props.params;
-    const { subjectId } = params;
-    const subjectPath = path.join(process.cwd(), "content", subjectId);
-    const courses = fs.readdirSync(subjectPath).filter((file) => {
+	const params = await props.params;
+	const { subjectId } = params;
+	const subjectPath = path.join(process.cwd(), "content", subjectId);
+	const courses = fs.readdirSync(subjectPath).filter((file) => {
 		const stat = fs.statSync(path.join(subjectPath, file));
 		return stat.isDirectory();
 	});
 
-    const courseData: Course[] = courses.map((courseId) => {
+	const courseData: Course[] = courses.map((courseId) => {
 		const summaryPath = path.join(subjectPath, courseId, "summary.md");
 		let title = courseId;
 		if (fs.existsSync(summaryPath)) {
@@ -35,15 +35,19 @@ export default async function SubjectPage(props: Props) {
 		return { id: courseId, title };
 	});
 
-    return (
+	return (
 		<div className="space-y-6">
-			<h1 className="text-3xl font-bold">Courses for {subjectId}</h1>
+			<h1 className="text-3xl font-bold">
+				Courses for <span className="capitalize">{subjectId}</span>
+			</h1>
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{courseData.map((course) => (
 					<Link key={course.id} href={`/${subjectId}/${course.id}`}>
 						<Card className="hover:bg-muted/50 transition-colors">
 							<CardHeader>
-								<CardTitle>{course.title}</CardTitle>
+								<CardTitle className="capitalize">
+									{course.title}
+								</CardTitle>
 							</CardHeader>
 						</Card>
 					</Link>
