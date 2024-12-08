@@ -1,3 +1,4 @@
+// src/app/[subjectId]/[courseId]/[unitId]/page.tsx
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
@@ -8,11 +9,11 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 interface Props {
-	params: {
+	params: Promise<{
 		subjectId: string;
 		courseId: string;
 		unitId: string;
-	};
+	}>;
 }
 
 interface Resource {
@@ -27,67 +28,31 @@ interface PathValidationResult {
 	redirect?: string;
 }
 
-function validatePath(
+async function getUnitContent(
 	subjectId: string,
-	courseId?: string,
-	unitId?: string
-): PathValidationResult | null {
-	const basePath = path.join(process.cwd(), "content");
-	const subjectPath = path.join(basePath, subjectId);
+	courseId: string,
+	unitId: string
+) {
+	const mdPath = path.join(
+		process.cwd(),
+		"content",
+		subjectId,
+		courseId,
+		unitId,
+		"summary.md"
+	);
 
-	if (!fs.existsSync(subjectPath)) {
-		return null;
+	if (!fs.existsSync(mdPath)) {
+		throw new Error("Unit content not found");
 	}
 
-	if (!courseId) {
-		return { path: subjectPath };
-	}
+	const fileContents = fs.readFileSync(mdPath, "utf8");
+	const { data, content } = matter(fileContents);
 
-	const coursePath = path.join(subjectPath, courseId);
-	if (!fs.existsSync(coursePath)) {
-		const courses = fs
-			.readdirSync(subjectPath)
-			.filter((dir) =>
-				fs.statSync(path.join(subjectPath, dir)).isDirectory(),
-			);
-		const correctCourse = courses.find(
-			(c) => c.toLowerCase() === courseId.toLowerCase(),
-		);
-		if (correctCourse) {
-			return {
-				path: coursePath,
-				redirect: `/${subjectId}/${correctCourse}${
-					unitId ? `/${unitId}` : ""
-				}`,
-			};
-		}
-		return null;
-	}
-
-	if (!unitId) {
-		return { path: coursePath };
-	}
-
-	const unitPath = path.join(coursePath, unitId);
-	if (!fs.existsSync(unitPath)) {
-		const units = fs
-			.readdirSync(coursePath)
-			.filter((dir) =>
-				fs.statSync(path.join(coursePath, dir)).isDirectory(),
-			);
-		const correctUnit = units.find(
-			(u) => u.toLowerCase() === unitId.toLowerCase(),
-		);
-		if (correctUnit) {
-			return {
-				path: unitPath,
-				redirect: `/${subjectId}/${courseId}/${correctUnit}`,
-			};
-		}
-		return null;
-	}
-
-	return { path: unitPath };
+	return {
+		title: data.title,
+		content: content,
+	};
 }
 
 function getResources(
@@ -100,39 +65,29 @@ function getResources(
 		return [];
 	}
 
-	// Get content directory resources
 	const contentResources = fs.readdirSync(resourcesDir).filter((file) => {
 		const filePath = path.join(resourcesDir, file);
 		return fs.statSync(filePath).isFile();
 	});
 
-	// Check public directory for PDF files
 	const publicPdfDir = path.join(
 		process.cwd(),
 		"public",
 		"resources",
 		subjectId,
 		courseId,
-		unitId,
+		unitId
 	);
 
-	// Get local PDF files
 	let pdfFiles: string[] = [];
 	if (fs.existsSync(publicPdfDir)) {
 		pdfFiles = fs
 			.readdirSync(publicPdfDir)
 			.filter((file) => file.startsWith("pdf_") && file.endsWith(".pdf"))
-			// Remove the local: prefix
 			.map((file) => file);
 	}
 
-	// Get PDF URL files
-	const pdfUrlFiles = contentResources
-		.filter((file) => file.startsWith("pdf_") && file.endsWith(".txt"))
-		.map((file) => file);
-
-	// Combine all resources
-	const allFiles = [...contentResources, ...pdfFiles, ...pdfUrlFiles];
+	const allFiles = [...contentResources, ...pdfFiles];
 
 	return allFiles.map((file) => {
 		const [type, ...idParts] = file.split("_");
@@ -140,15 +95,7 @@ function getResources(
 
 		let resourcePath = "";
 		if (type === "pdf") {
-			// Check if it's a local PDF file
-			if (file.endsWith(".pdf")) {
-				resourcePath = `/resources/${subjectId}/${courseId}/${unitId}/${file}`;
-			}
-			// Check if it's a URL PDF file
-			else if (file.endsWith(".txt")) {
-				const txtPath = path.join(resourcesDir, file);
-				resourcePath = fs.readFileSync(txtPath, "utf-8").trim();
-			}
+			resourcePath = `/resources/${subjectId}/${courseId}/${unitId}/${file}`;
 		}
 
 		return {
@@ -163,29 +110,18 @@ function getResources(
 }
 
 export default async function UnitPage(props: Props) {
-	const params = await props.params;
-	const { subjectId, courseId, unitId } = params;
-
-	const validation = validatePath(subjectId, courseId, unitId);
-
-	if (!validation) {
-		redirect("/");
-	}
-
-	if (validation.redirect) {
-		redirect(validation.redirect);
-	}
+	const { subjectId, courseId, unitId } = (await props.params);
 
 	try {
-		const summaryPath = path.join(validation.path, "summary.md");
-		if (!fs.existsSync(summaryPath)) {
-			redirect("/");
-		}
-
-		const fileContent = fs.readFileSync(summaryPath, "utf-8");
-		const { data, content } = matter(fileContent);
-
-		const resourcesDir = path.join(validation.path, "resources");
+		const unitContent = await getUnitContent(subjectId, courseId, unitId);
+		const resourcesDir = path.join(
+			process.cwd(),
+			"content",
+			subjectId,
+			courseId,
+			unitId,
+			"resources"
+		);
 		const resources = getResources(
 			resourcesDir,
 			subjectId,
@@ -194,43 +130,44 @@ export default async function UnitPage(props: Props) {
 		);
 
 		return (
-			<div className="space-y-8">
+			<div className="space-y-4">
 				<Card>
 					<CardHeader>
-						<CardTitle>{data.title}</CardTitle>
+						<CardTitle>{unitContent.title}</CardTitle>
 					</CardHeader>
-					<CardContent>
-						<ReactMarkdown className="prose dark:prose-invert max-w-none">
-							{content}
-						</ReactMarkdown>
+					<CardContent className="prose dark:prose-invert max-w-none">
+						<ReactMarkdown>{unitContent.content}</ReactMarkdown>
 					</CardContent>
 				</Card>
-				<Card>
-					<CardHeader>
-						<CardTitle>Resources</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-							{resources.map((resource) => (
-								<li key={`${resource.type}-${resource.id}`}>
-									<Link
-										href={`/${subjectId}/${courseId}/${unitId}/${resource.type}/${resource.id}`}
-										className="block p-4 rounded-lg border hover:bg-muted/50 transition-colors"
-									>
-										<div className="flex items-center justify-between">
-											<span className="font-medium">
-												{resource.title}
-											</span>
-											<Badge>
-												{resource.type.toUpperCase()}
-											</Badge>
-										</div>
-									</Link>
-								</li>
-							))}
-						</ul>
-					</CardContent>
-				</Card>
+
+				{resources.length > 0 && (
+					<Card>
+						<CardHeader>
+							<CardTitle>Resources</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+								{resources.map((resource) => (
+									<li key={`${resource.type}-${resource.id}`}>
+										<Link
+											href={`/${subjectId}/${courseId}/${unitId}/${resource.type}/${resource.id}`}
+											className="block p-4 rounded-lg border hover:bg-muted/50 transition-colors"
+										>
+											<div className="flex items-center justify-between">
+												<span className="font-medium">
+													{resource.title}
+												</span>
+												<Badge>
+													{resource.type.toUpperCase()}
+												</Badge>
+											</div>
+										</Link>
+									</li>
+								))}
+							</ul>
+						</CardContent>
+					</Card>
+				)}
 			</div>
 		);
 	} catch (error) {
