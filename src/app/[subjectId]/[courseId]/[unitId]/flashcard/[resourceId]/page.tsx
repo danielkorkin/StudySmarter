@@ -25,8 +25,13 @@ export default function FlashcardPage(props: Props) {
 	const params = use(props.params);
 	const [cards, setCards] = useState<Flashcard[]>([]);
 	const [currentIndex, setCurrentIndex] = useState(0);
+	const [currentCard, setCurrentCard] = useState<Flashcard | null>(null);
 	const [isFlipped, setIsFlipped] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
+	const [isAnimating, setIsAnimating] = useState(false);
+	const [slideDirection, setSlideDirection] = useState<
+		"left" | "right" | null
+	>(null);
 
 	const { subjectId, courseId, unitId, resourceId } = params;
 
@@ -40,6 +45,7 @@ export default function FlashcardPage(props: Props) {
 				);
 				const data = await response.json();
 				setCards(data.cards);
+				setCurrentCard(data.cards[0]);
 			} catch (err) {
 				console.error("Error loading flashcards:", err);
 			} finally {
@@ -51,6 +57,8 @@ export default function FlashcardPage(props: Props) {
 
 	useEffect(() => {
 		const handleKeyPress = (e: KeyboardEvent) => {
+			if (isAnimating) return;
+
 			switch (e.key) {
 				case "ArrowLeft":
 					previousCard();
@@ -67,27 +75,59 @@ export default function FlashcardPage(props: Props) {
 
 		window.addEventListener("keydown", handleKeyPress);
 		return () => window.removeEventListener("keydown", handleKeyPress);
-	}, []);
+	}, [isAnimating]);
 
 	const nextCard = () => {
-		setCurrentIndex((prev) => (prev + 1) % cards.length);
+		if (isAnimating || !currentCard) return;
+		setIsAnimating(true);
+		setSlideDirection("left");
 		setIsFlipped(false);
+
+		const nextIndex = (currentIndex + 1) % cards.length;
+
+		setTimeout(() => {
+			setCurrentCard(cards[nextIndex]);
+			setCurrentIndex(nextIndex);
+			setSlideDirection(null);
+			setIsAnimating(false);
+		}, 200);
 	};
 
 	const previousCard = () => {
-		setCurrentIndex((prev) => (prev - 1 + cards.length) % cards.length);
+		if (isAnimating || !currentCard) return;
+		setIsAnimating(true);
+		setSlideDirection("right");
 		setIsFlipped(false);
+
+		const prevIndex = (currentIndex - 1 + cards.length) % cards.length;
+
+		setTimeout(() => {
+			setCurrentCard(cards[prevIndex]);
+			setCurrentIndex(prevIndex);
+			setSlideDirection(null);
+			setIsAnimating(false);
+		}, 200);
 	};
 
-	const toggleFlip = () => setIsFlipped((prev) => !prev);
+	const toggleFlip = () => {
+		if (isAnimating) return;
+		setIsFlipped((prev) => !prev);
+	};
 
 	const shuffleCards = () => {
-		setCards((prev) => [...prev].sort(() => Math.random() - 0.5));
+		if (isAnimating) return;
+		setIsAnimating(true);
+		const shuffled = [...cards].sort(() => Math.random() - 0.5);
+		setCards(shuffled);
+		setCurrentCard(shuffled[0]);
 		setCurrentIndex(0);
 		setIsFlipped(false);
+		setTimeout(() => {
+			setIsAnimating(false);
+		}, 200);
 	};
 
-	if (isLoading || !cards.length) return null;
+	if (isLoading || !currentCard) return null;
 
 	return (
 		<div className="max-w-4xl mx-auto space-y-4">
@@ -101,22 +141,30 @@ export default function FlashcardPage(props: Props) {
 					</div>
 				</CardHeader>
 				<CardContent className="pt-6">
-					<div
-						className="relative min-h-[400px] [perspective:1000px]"
-						onClick={toggleFlip}
-					>
+					<div className="relative min-h-[400px] [perspective:1000px]">
 						<div
 							className={cn(
-								"absolute inset-0 w-full h-full transition-all duration-500",
-								"[transform-style:preserve-3d] cursor-pointer",
-								isFlipped && "[transform:rotateY(180deg)]",
+								"relative w-full h-[400px] cursor-pointer transition-all duration-200",
+								slideDirection === "left" &&
+									"animate-slide-left",
+								slideDirection === "right" &&
+									"animate-slide-right",
 							)}
+							onClick={toggleFlip}
 						>
-							<div className="absolute inset-0 flex items-center justify-center p-6 text-lg text-center [backface-visibility:hidden]">
-								{cards[currentIndex].term}
-							</div>
-							<div className="absolute inset-0 flex items-center justify-center p-6 text-lg text-center [backface-visibility:hidden] [transform:rotateY(180deg)]">
-								{cards[currentIndex].definition}
+							<div
+								className={cn(
+									"absolute inset-0 w-full h-full bg-card rounded-xl border shadow",
+									"[transform-style:preserve-3d] transition-transform duration-500",
+									isFlipped && "[transform:rotateX(180deg)]",
+								)}
+							>
+								<div className="absolute inset-0 flex items-center justify-center p-6 text-lg text-center [backface-visibility:hidden]">
+									{currentCard.term}
+								</div>
+								<div className="absolute inset-0 flex items-center justify-center p-6 text-lg text-center [backface-visibility:hidden] [transform:rotateX(180deg)]">
+									{currentCard.definition}
+								</div>
 							</div>
 						</div>
 					</div>
@@ -124,16 +172,36 @@ export default function FlashcardPage(props: Props) {
 			</Card>
 
 			<div className="flex justify-center gap-2">
-				<Button onClick={previousCard} variant="outline" size="icon">
+				<Button
+					onClick={previousCard}
+					variant="outline"
+					size="icon"
+					disabled={isAnimating}
+				>
 					<ChevronLeft className="h-4 w-4" />
 				</Button>
-				<Button onClick={toggleFlip} variant="outline" size="icon">
+				<Button
+					onClick={toggleFlip}
+					variant="outline"
+					size="icon"
+					disabled={isAnimating}
+				>
 					<FlipVertical className="h-4 w-4" />
 				</Button>
-				<Button onClick={shuffleCards} variant="outline" size="icon">
+				<Button
+					onClick={shuffleCards}
+					variant="outline"
+					size="icon"
+					disabled={isAnimating}
+				>
 					<Shuffle className="h-4 w-4" />
 				</Button>
-				<Button onClick={nextCard} variant="outline" size="icon">
+				<Button
+					onClick={nextCard}
+					variant="outline"
+					size="icon"
+					disabled={isAnimating}
+				>
 					<ChevronRight className="h-4 w-4" />
 				</Button>
 			</div>
