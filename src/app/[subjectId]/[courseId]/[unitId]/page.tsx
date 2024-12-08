@@ -96,18 +96,37 @@ function getResources(
 	const podcastFiles = contentResources
 		.filter((file) => file.startsWith("podcast_") && file.endsWith(".json"))
 		.map((file) => ({
-			id: file.slice(8, -5),
+			id: file.replace(/^podcast_/, "").replace(/\.json$/, ""),
 			type: "podcast",
 			title: file
-				.slice(8, -5)
+				.replace(/^podcast_/, "")
+				.replace(/\.json$/, "")
 				.replace(/-/g, " ")
 				.replace(/\b\w/g, (l) => l.toUpperCase()),
 			path: "",
 		}));
 
-	// Combine all resources
+	// Filter flashcard files from content resources
+	const flashcardFiles = contentResources
+		.filter(
+			(file) => file.startsWith("flashcard_") && file.endsWith(".json"),
+		)
+		.map((file) => ({
+			id: file.replace(/^flashcard_/, "").replace(/\.json$/, ""),
+			type: "flashcard",
+			title: file
+				.replace(/^flashcard_/, "")
+				.replace(/\.json$/, "")
+				.replace(/-/g, " ")
+				.replace(/\b\w/g, (l) => l.toUpperCase()),
+			path: "",
+		}));
+
+	// Combine all resources excluding podcast and flashcard files
 	const allFiles = [
-		...contentResources.filter((f) => !f.startsWith("podcast_")),
+		...contentResources.filter(
+			(f) => !f.startsWith("podcast_") && !f.startsWith("flashcard_"),
+		),
 		...pdfFiles,
 	];
 
@@ -130,7 +149,7 @@ function getResources(
 		};
 	});
 
-	return [...standardResources, ...podcastFiles];
+	return [...standardResources, ...podcastFiles, ...flashcardFiles];
 }
 
 export default async function UnitPage(props: Props) {

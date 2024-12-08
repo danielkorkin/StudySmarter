@@ -9,6 +9,16 @@ export default {
 	],
 	theme: {
 		extend: {
+			perspective: {
+				"1000": "1000px",
+			},
+			rotate: {
+				"y-180": "rotateY(180deg)",
+				"y-0": "rotateY(0deg)",
+			},
+			backfaceVisibility: {
+				hidden: "hidden",
+			},
 			colors: {
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",
