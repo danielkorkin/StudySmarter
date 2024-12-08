@@ -22,6 +22,13 @@ interface UnitContent {
 	inProgress?: boolean;
 }
 
+interface Resource {
+	id: string;
+	type: string;
+	title: string;
+	path: string;
+}
+
 async function getUnitContent(
 	subjectId: string,
 	courseId: string,
