@@ -6,7 +6,8 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint"
+		"lint": "next lint",
+		"prepare": "husky"
 	},
 	"dependencies": {
 		"@excalidraw/excalidraw": "^0.17.1-c0b80a0",
