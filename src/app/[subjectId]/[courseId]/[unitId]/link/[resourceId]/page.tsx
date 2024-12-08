@@ -13,19 +13,19 @@ interface Props {
 }
 
 export default async function LinkResourcePage(props: Props) {
-    const params = await props.params;
-    const { subjectId, courseId, unitId, resourceId } = params;
+	const params = await props.params;
+	const { subjectId, courseId, unitId, resourceId } = params;
 
-    const linkPath = path.join(
+	const linkPath = path.join(
 		process.cwd(),
 		"content",
 		subjectId,
 		courseId,
 		unitId,
 		"resources",
-		`link_${resourceId}.txt`
+		`link_${resourceId}.txt`,
 	);
-    const url = fs.readFileSync(linkPath, "utf-8").trim();
+	const url = fs.readFileSync(linkPath, "utf-8").trim();
 
-    redirect(url);
+	redirect(url);
 }

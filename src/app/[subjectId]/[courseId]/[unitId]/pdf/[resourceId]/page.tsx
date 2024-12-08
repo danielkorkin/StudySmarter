@@ -24,7 +24,7 @@ export default async function PDFResourcePage(props: Props) {
 		subjectId,
 		courseId,
 		unitId,
-		"resources"
+		"resources",
 	);
 
 	const txtFile = path.join(resourcesDir, `pdf_${resourceId}.txt`);

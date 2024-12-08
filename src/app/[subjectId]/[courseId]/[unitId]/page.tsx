@@ -28,7 +28,7 @@ interface PathValidationResult {
 function validatePath(
 	subjectId: string,
 	courseId?: string,
-	unitId?: string
+	unitId?: string,
 ): PathValidationResult | null {
 	const basePath = path.join(process.cwd(), "content");
 	const subjectPath = path.join(basePath, subjectId);
@@ -46,10 +46,10 @@ function validatePath(
 		const courses = fs
 			.readdirSync(subjectPath)
 			.filter((dir) =>
-				fs.statSync(path.join(subjectPath, dir)).isDirectory()
+				fs.statSync(path.join(subjectPath, dir)).isDirectory(),
 			);
 		const correctCourse = courses.find(
-			(c) => c.toLowerCase() === courseId.toLowerCase()
+			(c) => c.toLowerCase() === courseId.toLowerCase(),
 		);
 		if (correctCourse) {
 			return {
@@ -71,10 +71,10 @@ function validatePath(
 		const units = fs
 			.readdirSync(coursePath)
 			.filter((dir) =>
-				fs.statSync(path.join(coursePath, dir)).isDirectory()
+				fs.statSync(path.join(coursePath, dir)).isDirectory(),
 			);
 		const correctUnit = units.find(
-			(u) => u.toLowerCase() === unitId.toLowerCase()
+			(u) => u.toLowerCase() === unitId.toLowerCase(),
 		);
 		if (correctUnit) {
 			return {
@@ -92,7 +92,7 @@ function getResources(
 	resourcesDir: string,
 	subjectId: string,
 	courseId: string,
-	unitId: string
+	unitId: string,
 ): Resource[] {
 	if (!fs.existsSync(resourcesDir)) {
 		return [];
@@ -111,7 +111,7 @@ function getResources(
 		"resources",
 		subjectId,
 		courseId,
-		unitId
+		unitId,
 	);
 
 	// Get local PDF files
@@ -188,7 +188,7 @@ export default async function UnitPage(props: Props) {
 			resourcesDir,
 			subjectId,
 			courseId,
-			unitId
+			unitId,
 		);
 
 		return (
