@@ -60,11 +60,13 @@ function getResources(
 		return [];
 	}
 
+	// Get content directory resources
 	const contentResources = fs.readdirSync(resourcesDir).filter((file) => {
 		const filePath = path.join(resourcesDir, file);
 		return fs.statSync(filePath).isFile();
 	});
 
+	// Check public directory for PDF files
 	const publicPdfDir = path.join(
 		process.cwd(),
 		"public",
@@ -74,6 +76,7 @@ function getResources(
 		unitId,
 	);
 
+	// Get local PDF files
 	let pdfFiles: string[] = [];
 	if (fs.existsSync(publicPdfDir)) {
 		pdfFiles = fs
@@ -82,9 +85,26 @@ function getResources(
 			.map((file) => file);
 	}
 
-	const allFiles = [...contentResources, ...pdfFiles];
+	// Filter podcast files from content resources
+	const podcastFiles = contentResources
+		.filter((file) => file.startsWith("podcast_") && file.endsWith(".json"))
+		.map((file) => ({
+			id: file.slice(8, -5),
+			type: "podcast",
+			title: file
+				.slice(8, -5)
+				.replace(/-/g, " ")
+				.replace(/\b\w/g, (l) => l.toUpperCase()),
+			path: "",
+		}));
 
-	return allFiles.map((file) => {
+	// Combine all resources
+	const allFiles = [
+		...contentResources.filter((f) => !f.startsWith("podcast_")),
+		...pdfFiles,
+	];
+
+	const standardResources = allFiles.map((file) => {
 		const [type, ...idParts] = file.split("_");
 		const id = idParts.join("_").replace(/\.[^/.]+$/, "");
 
@@ -102,6 +122,8 @@ function getResources(
 			path: resourcePath,
 		};
 	});
+
+	return [...standardResources, ...podcastFiles];
 }
 
 export default async function UnitPage(props: Props) {
