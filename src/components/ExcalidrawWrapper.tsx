@@ -11,12 +11,12 @@ import type { ComponentType } from "react";
 const Excalidraw = dynamic(
 	() =>
 		import("@excalidraw/excalidraw").then(
-			(mod) => mod.Excalidraw as ComponentType<ExcalidrawProps>
+			(mod) => mod.Excalidraw as ComponentType<ExcalidrawProps>,
 		),
 	{
 		ssr: false,
 		loading: () => <div className="p-4">Loading Excalidraw...</div>,
-	}
+	},
 );
 
 interface Props {
