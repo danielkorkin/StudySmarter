@@ -55,7 +55,9 @@ export default async function PDFResourcePage(props: Props) {
 	return (
 		<Card className="max-w-4xl mx-auto">
 			<CardHeader>
-				<CardTitle>{resourceId.replace(/-/g, " ")}</CardTitle>
+				<CardTitle className="capitalize">
+					{resourceId.replace(/-/g, " ")}
+				</CardTitle>
 			</CardHeader>
 			<CardContent>
 				<div className="w-full h-[600px]">

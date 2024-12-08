@@ -36,7 +36,7 @@ export default async function TextResourcePage(props: Props) {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>
+				<CardTitle className="capitalize">
 					{resourceId
 						.replace(/-/g, " ")
 						.replace(/\b\w/g, (l) => l.toUpperCase())}
