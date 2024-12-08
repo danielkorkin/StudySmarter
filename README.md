@@ -24,8 +24,8 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+-   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+-   [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
@@ -54,15 +54,31 @@ unitId: "unit1"
 
 Welcome to Unit 1! This unit covers:
 
-- Basic algebraic expressions
-- Solving linear equations
-- Working with variables and constants
+-   Basic algebraic expressions
+-   Solving linear equations
+-   Working with variables and constants
 
 Key concepts you'll learn:
 
 1. Terms and coefficients
 2. Like terms
 3. Distributive property
+```
+
+### Unit In Progress Status
+
+Add `inProgress: true` to unit summary frontmatter to mark as in progress:
+
+```md
+---
+title: "Unit 1: Introduction"
+subjectId: "math"
+courseId: "algebra"
+unitId: "unit1"
+inProgress: true
+---
+
+Unit content...
 ```
 
 ## Creating Resources
@@ -80,9 +96,9 @@ Example text resource:
 
 ## Key Points
 
-- An equation is an expression with an equals sign
-- Variables represent unknown values
-- Solve by isolating the variable
+-   An equation is an expression with an equals sign
+-   Variables represent unknown values
+-   Solve by isolating the variable
 
 ## Examples
 
@@ -129,33 +145,55 @@ Example structure:
 }
 ```
 
+### Podcast Resources
+
+Create a JSON file:
+`content/[subject]/[course]/[unit]/resources/podcast_[name].json`
+
+Example structure:
+
+```json
+{
+	"apple": "https://embed.podcasts.apple.com/us/podcast/example?theme=light",
+	"spotify": "https://open.spotify.com/embed/episode/example"
+}
+```
+
+You can include either or both platform links.
+
 ## File Naming Conventions
 
-- Use lowercase letters
-- Use hyphens for spaces in names
-- Prefix files with resource types
-    - `text_`
-    - `pdf_`
-    - `link_`
-    - `excalidraw_`
+-   Use lowercase letters
+-   Use hyphens for spaces in names
+-   Prefix files with resource types
+    -   `text_`
+    -   `pdf_`
+    -   `link_`
+    -   `excalidraw_`
 
 ## Example Directory Structure
 
 ```
+
 content/
-  math/
-    algebra/
-      unit1/
-        summary.md
-        resources/
-          text_study-guide.md
-          pdf_worksheet.txt
-          link_khan-academy.txt
-          excalidraw_graphs.excalidraw
+math/
+algebra/
+unit1/
+summary.md
+resources/
+text_study-guide.md
+pdf_worksheet.txt
+link_khan-academy.txt
+excalidraw_graphs.excalidraw
 public/
-  resources/
-    math/
-      algebra/
-        unit1/
-          pdf_practice.pdf
+resources/
+math/
+algebra/
+unit1/
+pdf_practice.pdf
+
+```
+
+```
+
 ```

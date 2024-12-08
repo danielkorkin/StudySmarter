@@ -29,7 +29,10 @@ export default function RootLayout({
 					</main>
 				</ThemeProvider>
 			</body>
-			<Script src="https://scripts.simpleanalyticscdn.com/latest.js" data-collect-dnt="true" />
+			<Script
+				src="https://scripts.simpleanalyticscdn.com/latest.js"
+				data-collect-dnt="true"
+			/>
 		</html>
 	);
 }
