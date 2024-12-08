@@ -111,6 +111,7 @@ containing just the URL:
 
 Create an Excalidraw file:
 `content/[subject]/[course]/[unit]/resources/excalidraw_[name].excalidraw`
+
 Example structure:
 
 ```json
