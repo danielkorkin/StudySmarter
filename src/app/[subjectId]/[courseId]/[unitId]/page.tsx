@@ -88,7 +88,6 @@ function validatePath(
 	return { path: unitPath };
 }
 
-// src/app/[subjectId]/[courseId]/[unitId]/page.tsx
 function getResources(
 	resourcesDir: string,
 	subjectId: string,
@@ -114,16 +113,24 @@ function getResources(
 		courseId,
 		unitId
 	);
+
+	// Get local PDF files
 	let pdfFiles: string[] = [];
 	if (fs.existsSync(publicPdfDir)) {
 		pdfFiles = fs
 			.readdirSync(publicPdfDir)
 			.filter((file) => file.startsWith("pdf_") && file.endsWith(".pdf"))
-			.map((file) => `pdf_${file.slice(4)}`); // Convert to same format as other resources
+			// Remove the local: prefix
+			.map((file) => file);
 	}
 
-	// Combine and process all resources
-	const allFiles = [...contentResources, ...pdfFiles];
+	// Get PDF URL files
+	const pdfUrlFiles = contentResources
+		.filter((file) => file.startsWith("pdf_") && file.endsWith(".txt"))
+		.map((file) => file);
+
+	// Combine all resources
+	const allFiles = [...contentResources, ...pdfFiles, ...pdfUrlFiles];
 
 	return allFiles.map((file) => {
 		const [type, ...idParts] = file.split("_");
@@ -131,7 +138,15 @@ function getResources(
 
 		let resourcePath = "";
 		if (type === "pdf") {
-			resourcePath = `/resources/${subjectId}/${courseId}/${unitId}/${file}`;
+			// Check if it's a local PDF file
+			if (file.endsWith(".pdf")) {
+				resourcePath = `/resources/${subjectId}/${courseId}/${unitId}/${file}`;
+			}
+			// Check if it's a URL PDF file
+			else if (file.endsWith(".txt")) {
+				const txtPath = path.join(resourcesDir, file);
+				resourcePath = fs.readFileSync(txtPath, "utf-8").trim();
+			}
 		}
 
 		return {
