@@ -161,6 +161,28 @@ Example structure:
 
 You can include either or both platform links.
 
+### Flashcard Resources
+
+Create a JSON file:
+`content/[subject]/[course]/[unit]/resources/flashcard_[name].json`
+
+Example structure:
+
+```json
+{
+	"cards": [
+		{
+			"term": "Binary",
+			"definition": "A base-2 number system using only 0 and 1"
+		},
+		{
+			"term": "Bit",
+			"definition": "The smallest unit of data, representing 0 or 1"
+		}
+	]
+}
+```
+
 ## File Naming Conventions
 
 -   Use lowercase letters
