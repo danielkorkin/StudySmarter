@@ -13,21 +13,21 @@ export default {
 				"slide-left": {
 					"0%": {
 						transform: "translateX(0)",
-						opacity: 1,
+						opacity: "1",
 					},
 					"100%": {
 						transform: "translateX(-100%)",
-						opacity: 0,
+						opacity: "0",
 					},
 				},
 				"slide-right": {
 					"0%": {
 						transform: "translateX(0)",
-						opacity: 1,
+						opacity: "1",
 					},
 					"100%": {
 						transform: "translateX(100%)",
-						opacity: 0,
+						opacity: "0",
 					},
 				},
 			},
