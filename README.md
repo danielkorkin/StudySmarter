@@ -183,6 +183,22 @@ Example structure:
 }
 ```
 
+### Video Resources
+
+Create a JSON file:
+`content/[subject]/[course]/[unit]/resources/video_[name].json`
+
+Example structure:
+
+```json
+{
+	"youtubeUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+	"startTime": 0 // Optional: Start time in seconds
+}
+```
+
+Only YouTube URLs are supported. The `startTime` field is optional and specifies where the video should start playing from in seconds.
+
 ## File Naming Conventions
 
 -   Use lowercase letters
