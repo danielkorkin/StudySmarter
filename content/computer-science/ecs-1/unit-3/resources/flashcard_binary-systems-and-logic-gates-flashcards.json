@@ -1,0 +1,124 @@
+{
+	"cards": [
+		{
+			"term": "Binary",
+			"definition": "Binary is a base-2 number system using only the digits 0 and 1."
+		},
+		{
+			"term": "Importance of Binary",
+			"definition": "Binary is crucial due to its simplicity, aligning perfectly with the on/off states of electronic circuits."
+		},
+		{
+			"term": "Place Value",
+			"definition": "In binary, each position represents a power of 2, increasing from right to left (e.g., 1, 2, 4, 8, 16...)."
+		},
+		{
+			"term": "Conversion from Decimal to Binary",
+			"definition": "To convert from decimal to binary, repeatedly divide by 2 and note the remainders."
+		},
+		{
+			"term": "Example of Binary Conversion",
+			"definition": "The binary number 1011 represents (1 * 8) + (0 * 4) + (1 * 2) + (1 * 1) = 11 in decimal."
+		},
+		{
+			"term": "Binary Arithmetic",
+			"definition": "Binary arithmetic involves performing addition, subtraction, multiplication, and division using binary rules."
+		},
+		{
+			"term": "Binary Addition",
+			"definition": "For example: 1 + 1 = 0 (carry 1)."
+		},
+		{
+			"term": "Binary Subtraction",
+			"definition": "For example: 0 - 1 = 1 (borrow 1)."
+		},
+		{
+			"term": "Binary Multiplication",
+			"definition": "For example: 0 * 1 = 0, 1 * 1 = 1."
+		},
+		{
+			"term": "Binary Division",
+			"definition": "Similar to decimal division but using binary rules."
+		},
+		{
+			"term": "Bit",
+			"definition": "A bit is the smallest unit of data in a computer, representing a 0 or 1."
+		},
+		{
+			"term": "Byte",
+			"definition": "A byte consists of 8 bits."
+		},
+		{
+			"term": "Information Capacity",
+			"definition": "8 bits (1 byte) = 256 distinct values, 16 bits = 65,536 unique values, 32 bits = Over 4 billion values."
+		},
+		{
+			"term": "Data Types",
+			"definition": "Different data types use varying numbers of bits."
+		},
+		{
+			"term": "Integers",
+			"definition": "Whole numbers, typically using 16 or 32 bits."
+		},
+		{
+			"term": "Characters",
+			"definition": "Letters and symbols, often using 8 bits (1 byte) each."
+		},
+		{
+			"term": "Floating-point",
+			"definition": "Decimal numbers, usually using 32 or 64 bits."
+		},
+		{
+			"term": "Logic Gates",
+			"definition": "Logic gates are the fundamental building blocks of digital circuits."
+		},
+		{
+			"term": "AND Gate",
+			"definition": "Outputs true (1) only when all inputs are true."
+		},
+		{
+			"term": "OR Gate",
+			"definition": "Outputs true (1) if at least one input is true."
+		},
+		{
+			"term": "NOT Gate",
+			"definition": "Inverts the input value (true becomes false, and vice versa)."
+		},
+		{
+			"term": "NAND Gate",
+			"definition": "Outputs the opposite of the AND gate."
+		},
+		{
+			"term": "NOR Gate",
+			"definition": "Outputs the opposite of the OR gate."
+		},
+		{
+			"term": "XOR Gate",
+			"definition": "Outputs true (1) if exactly one input is true."
+		},
+		{
+			"term": "Boolean Algebra",
+			"definition": "Boolean algebra provides the mathematical basis for digital logic."
+		},
+		{
+			"term": "Ohm's Law",
+			"definition": "Ohm's Law states that the voltage (V) across a conductor is directly proportional to the current (I) flowing through it, with resistance (R) as the proportionality constant."
+		},
+		{
+			"term": "Ohm's Law Formula",
+			"definition": "V = I * R"
+		},
+		{
+			"term": "Voltage (V)",
+			"definition": "The electrical potential difference between two points, driving electrons. It's measured in volts."
+		},
+		{
+			"term": "Current (I)",
+			"definition": "The flow rate of electric charge, measured in amps."
+		},
+		{
+			"term": "Resistance (R)",
+			"definition": "The opposition to current flow, measured in ohms."
+		}
+	]
+}

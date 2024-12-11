@@ -4,6 +4,7 @@
 import { useState, useEffect, use } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { formatTitle } from "@/lib/utils";
 
 interface VideoResource {
 	youtubeUrl: string;
@@ -84,7 +85,7 @@ export default function VideoResourcePage(props: Props) {
 		<Card className="max-w-4xl mx-auto">
 			<CardHeader>
 				<CardTitle className="capitalize">
-					{resourceId.replace(/\b\w/g, (l) => l.toUpperCase())}
+					{formatTitle(resourceId)}
 				</CardTitle>
 			</CardHeader>
 			<CardContent>
