@@ -7,6 +7,9 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import "katex/dist/katex.min.css";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 
 interface Props {
 	params: Promise<{
@@ -182,7 +185,12 @@ export default async function UnitPage(props: Props) {
 						)}
 					</CardHeader>
 					<CardContent className="prose dark:prose-invert max-w-none">
-						<ReactMarkdown>{unitContent.content}</ReactMarkdown>
+						<ReactMarkdown
+							remarkPlugins={[remarkMath]}
+							rehypePlugins={[rehypeKatex]}
+						>
+							{unitContent.content}
+						</ReactMarkdown>
 					</CardContent>
 				</Card>
 

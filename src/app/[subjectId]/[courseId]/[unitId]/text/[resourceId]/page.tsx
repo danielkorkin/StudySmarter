@@ -4,6 +4,9 @@ import path from "path";
 import { redirect } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import "katex/dist/katex.min.css";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 
 interface Props {
 	params: Promise<{
@@ -43,7 +46,12 @@ export default async function TextResourcePage(props: Props) {
 				</CardTitle>
 			</CardHeader>
 			<CardContent className="prose dark:prose-invert max-w-none">
-				<ReactMarkdown>{content}</ReactMarkdown>
+				<ReactMarkdown
+					remarkPlugins={[remarkMath]}
+					rehypePlugins={[rehypeKatex]}
+				>
+					{content}
+				</ReactMarkdown>
 			</CardContent>
 		</Card>
 	);
