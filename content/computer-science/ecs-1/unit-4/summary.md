@@ -3,7 +3,6 @@ title: "Unit 4: Network Functionality and Topologies"
 subjectId: "computer-science"
 courseId: "ecs-1"
 unitId: "unit-4"
-inProgress: true
 ---
 
 ## Unit Summary: Network Functionality and Topologies
