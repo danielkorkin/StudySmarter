@@ -1,0 +1,181 @@
+{
+	"cards": [
+		{
+			"term": "LAN (Local Area Network)",
+			"definition": "Connects computers and devices within a small area, such as a single building or school. Allows for fast and secure sharing of resources."
+		},
+		{
+			"term": "WAN (Wide Area Network)",
+			"definition": "Connects computers and devices over large geographic areas, such as cities or countries. The internet is the largest example of a WAN."
+		},
+		{
+			"term": "PAN (Personal Area Network)",
+			"definition": "A small network used for connecting personal devices over short distances, like a phone paired with wireless earbuds via Bluetooth."
+		},
+		{
+			"term": "MAN (Metropolitan Area Network)",
+			"definition": "A network that spans a city or large campus, connecting multiple LANs for efficient communication across a metropolitan area."
+		},
+		{
+			"term": "Bus",
+			"definition": "All devices share a single main cable, using less cable overall. It's suited for fixed spaces, making it hard to move, and it's less reliable for large networks due to its single-cable dependency."
+		},
+		{
+			"term": "Ring",
+			"definition": "Devices connect in a circle, so adding a new device or any break stops the network. Dual rings add a backup, keeping the network running even if there's a break."
+		},
+		{
+			"term": "Star",
+			"definition": "All devices connect to a central device (like a hub or switch). If the central device fails, all connections are lost."
+		},
+		{
+			"term": "Mesh",
+			"definition": "Connects each device to every other device, requiring many connections and cables for full interconnectivity. As more devices join, managing the network becomes increasingly complex."
+		},
+		{
+			"term": "Hybrid",
+			"definition": "Combines two or more network types, like ring and bus, allowing customization to meet specific needs but making design and maintenance more complex."
+		},
+		{
+			"term": "Hub",
+			"definition": "Connects multiple computers together in a network. It broadcasts data to all connected devices. Connects multiple network segments, typically in a star topology."
+		},
+		{
+			"term": "Switch",
+			"definition": "Similar to a hub but smarter—it sends data directly to the intended device. Like a hub but can filter packets for better performance."
+		},
+		{
+			"term": "Router",
+			"definition": "A device that directs data between networks. It's what helps your devices connect to the internet. Connects multiple segments and directs traffic using IP addresses."
+		},
+		{
+			"term": "Access Point",
+			"definition": "Allows wireless devices to join a wired network. Connects wireless devices to a network."
+		},
+		{
+			"term": "Modem",
+			"definition": "Connects your local network to the internet (often combined with a router at home). Connects to the internet by converting analog and digital signals."
+		},
+		{
+			"term": "Firewall",
+			"definition": "Protects your network by blocking unauthorized access."
+		},
+		{
+			"term": "Bridge",
+			"definition": "Connects similar network segments."
+		},
+		{
+			"term": "Repeater",
+			"definition": "Boosts the network signal to increase range."
+		},
+		{
+			"term": "Media Converter",
+			"definition": "Changes cabling types, e.g., Ethernet-to-fiber."
+		},
+		{
+			"term": "Wireless LAN Controller",
+			"definition": "Manages wireless access points."
+		},
+		{
+			"term": "Load Balancer",
+			"definition": "Distributes traffic across servers for stability and efficiency."
+		},
+		{
+			"term": "Routing",
+			"definition": "The process of directing data packets between networks."
+		},
+		{
+			"term": "Static Routing",
+			"definition": "Fixed paths are manually set by the network administrator. An example is routing like a map that doesn't change, no matter what happens on the road."
+		},
+		{
+			"term": "Dynamic Routing",
+			"definition": "Routes adjust based on network conditions. An example is GPS that updates to avoid traffic."
+		},
+		{
+			"term": "RIP (Routing Information Protocol)",
+			"definition": "Uses the number of hops to determine the best route. Good for small networks."
+		},
+		{
+			"term": "OSPF (Open Shortest Path First)",
+			"definition": "Calculates the fastest path in large networks using an algorithm."
+		},
+		{
+			"term": "EIGRP (Enhanced Interior Gateway Routing Protocol)",
+			"definition": "Balances speed and ease of management, ideal for private networks."
+		},
+		{
+			"term": "BGP (Border Gateway Protocol)",
+			"definition": "The core protocol of the internet, directing data between different networks worldwide."
+		},
+		{
+			"term": "Communication",
+			"definition": "The imparting or exchanging of information or news. Can occur between people and machines in various combinations."
+		},
+		{
+			"term": "Telecommunication",
+			"definition": "Fundamental to how the modern world functions."
+		},
+		{
+			"term": "Impact of computers on communication",
+			"definition": "Made telecommunication cheap and easy. Made collaboration very simple and convenient. Opened up global perspectives."
+		},
+		{
+			"term": "Encoding",
+			"definition": "Preparing the information for transmission."
+		},
+		{
+			"term": "Transmission",
+			"definition": "Sending the encoded information."
+		},
+		{
+			"term": "Decoding",
+			"definition": "Converting the transmitted information back into a usable form."
+		},
+		{
+			"term": "Data flow",
+			"definition": "Efficient data transfer is critical in WANs, where topologies like Mesh can handle more traffic."
+		},
+		{
+			"term": "Fault tolerance",
+			"definition": "Essential in MANs and WANs that span large areas, where Ring or Mesh topologies can prevent single points of failure."
+		},
+		{
+			"term": "Scalability and cost efficiency",
+			"definition": "Important for LANs and PANs that must balance budget with performance, often favoring Star or Hybrid topologies."
+		},
+		{
+			"term": "Communication Loop",
+			"definition": "A cyclical process where information is encoded, transmitted, and decoded to achieve understanding."
+		},
+		{
+			"term": "Network Topology",
+			"definition": "Describes how devices are connected, showing the layout and paths data travels through a network."
+		},
+		{
+			"term": "Network Topologies",
+			"definition": "Various network layouts, including Bus, Ring, Star, Mesh, and Hybrid."
+		},
+		{
+			"term": "Network Types",
+			"definition": "Categories of networks (LAN, WAN, PAN, MAN) defined by their size, area, and purpose."
+		},
+		{
+			"term": "Demarcation Point",
+			"definition": "The boundary where an ISP’s network ends and the customer's network begins, often marked by a device like a smartjack."
+		},
+		{
+			"term": "Satellite & DSL",
+			"definition": "Internet access provided via orbiting satellites or through telephone lines (DSL)."
+		},
+		{
+			"term": "Cable and Leased Lines",
+			"definition": "Broadband delivered over cable (coaxial/fiber) or dedicated leased lines for stable, high-speed service."
+		},
+		{
+			"term": "Networking Devices",
+			"definition": "Hardware components (e.g., routers, switches, modems) that enable communication and resource sharing on a network."
+		}
+	],
+	"quizletUrl": "https://quizlet.com/986246557/network-fundamentals-study-guide-flash-cards/"
+}

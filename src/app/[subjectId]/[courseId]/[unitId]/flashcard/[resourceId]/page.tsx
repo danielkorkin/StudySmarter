@@ -11,7 +11,7 @@ import {
 	FlipVertical,
 	ExternalLink,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatTitle } from "@/lib/utils";
 
 interface Flashcard {
 	term: string;
@@ -148,9 +148,7 @@ export default function FlashcardPage(props: Props) {
 				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 					<div className="flex items-center gap-4">
 						<CardTitle className="capitalize">
-							{resourceId.replace(/\b\w/g, (l) =>
-								l.toUpperCase(),
-							)}
+							{formatTitle(resourceId)}
 						</CardTitle>
 						{quizletUrl && (
 							<Button
