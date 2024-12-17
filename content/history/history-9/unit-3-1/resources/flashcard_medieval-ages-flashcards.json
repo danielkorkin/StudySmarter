@@ -1,0 +1,225 @@
+{
+	"cards": [
+		{
+			"term": "Medieval period",
+			"definition": "The Medieval period, also known as the Middle Ages, lasted from about 500 to 1500."
+		},
+		{
+			"term": "Charlemagne",
+			"definition": "Charlemagne, or Charles the Great, was a Frankish ruler who built an empire across France, Germany, and part of Italy around 800."
+		},
+		{
+			"term": "Pope Leo III",
+			"definition": "In 800, Pope Leo III crowned Charlemagne 'emperor,' reviving the idea of a united Christian community."
+		},
+		{
+			"term": "missi dominici",
+			"definition": "Officials sent out by Charlemagne to check on roads, listen to grievances, and see that justice was done."
+		},
+		{
+			"term": "Treaty of Verdun",
+			"definition": "Charlemagne's empire was divided into three regions by the Treaty of Verdun in 843."
+		},
+		{
+			"term": "Feudalism",
+			"definition": "A loosely organized system of rule in which powerful local lords divided their landholdings among lesser lords."
+		},
+		{
+			"term": "vassals",
+			"definition": "Lesser lords who pledged service and loyalty to the greater lord in exchange for land."
+		},
+		{
+			"term": "fief",
+			"definition": "An estate granted by a lord to a vassal, which could range from a few acres to hundreds of square miles."
+		},
+		{
+			"term": "military service",
+			"definition": "Vassals owed their lords 40 days of military service each year."
+		},
+		{
+			"term": "liege lord",
+			"definition": "A vassal usually had a liege lord to whom he owed his first loyalty."
+		},
+		{
+			"term": "serfs",
+			"definition": "The lowest class in feudal society, working the land for the lords."
+		},
+		{
+			"term": "Castles",
+			"definition": "Castles were built for defense, not comfort."
+		},
+		{
+			"term": "protective measures of castles",
+			"definition": "Castles had walls, arrow loops, drawbridges, and towers."
+		},
+		{
+			"term": "watchtowers",
+			"definition": "Some castles had watchtowers close to towns, where torches were lit to signal threats."
+		},
+		{
+			"term": "Knights",
+			"definition": "Knights were mounted warriors who trained from boyhood."
+		},
+		{
+			"term": "training for knighthood",
+			"definition": "Training began at age seven, with the boy learning to ride and fight."
+		},
+		{
+			"term": "dubbed",
+			"definition": "At about 21, a knight was dubbed, taking his place beside other warriors."
+		},
+		{
+			"term": "chainmail",
+			"definition": "Knights used chainmail in the early medieval ages."
+		},
+		{
+			"term": "plate armor",
+			"definition": "Knights used plate armor in later medieval ages."
+		},
+		{
+			"term": "jousting tournaments",
+			"definition": "Fighting started to decrease after the 1100s, leading knights to participate in jousting tournaments."
+		},
+		{
+			"term": "Chivalry",
+			"definition": "A code of conduct that required knights to be brave, loyal, true to their word, generous to their enemies, and protective of women."
+		},
+		{
+			"term": "Vassal",
+			"definition": "A lesser lord who pledged loyalty and service to a more powerful lord in exchange for land (a fief)."
+		},
+		{
+			"term": "Fief",
+			"definition": "An estate or land granted by a lord to a vassal in exchange for loyalty and service."
+		},
+		{
+			"term": "Serf/Peasant",
+			"definition": "Peasants bound to the land who were not free, could not leave without permission, worked on the lord's land, and received the lord's protection."
+		},
+		{
+			"term": "Daily life for serfs",
+			"definition": "Harsh, long work hours, short life expectancy (~35 years), dwellings often one-room huts made of wood or straw, sometimes including livestock."
+		},
+		{
+			"term": "Noble/Noblewomen",
+			"definition": "Powerful lords who held large fiefs; noblewomen ran the manor while lords were away."
+		},
+		{
+			"term": "Clergy",
+			"definition": "Priests, monks, and nuns who were responsible for religious life and devoted themselves to spiritual goals."
+		},
+		{
+			"term": "Monks and Nuns",
+			"definition": "People who lived in monasteries and convents, taking vows of poverty, chastity, and obedience, while providing social services."
+		},
+		{
+			"term": "Monasteries",
+			"definition": "Centers of learning where monks and nuns worked, preserved ancient writings, and provided social services."
+		},
+		{
+			"term": "Catholic Church",
+			"definition": "A powerful organization that unified Western Europe, shaping medieval life with the Pope as its spiritual leader."
+		},
+		{
+			"term": "Pope",
+			"definition": "The spiritual leader of the Catholic Church, head of the Papal States, who claimed authority over secular rulers."
+		},
+		{
+			"term": "Canon Law",
+			"definition": "The body of laws established by the Catholic Church, governing religious teachings, behavior, and morals."
+		},
+		{
+			"term": "Tithe",
+			"definition": "A Church tax equal to a tenth of a person's income."
+		},
+		{
+			"term": "Secular",
+			"definition": "Refers to worldly matters rather than spiritual; the Church was the most powerful secular force in Western Europe."
+		},
+		{
+			"term": "Excommunication",
+			"definition": "The most severe Church penalty for disobedience, banning an individual from the sacraments and Church community."
+		},
+		{
+			"term": "Interdict",
+			"definition": "A Church punishment excluding an entire town, region, or kingdom from most sacraments."
+		},
+		{
+			"term": "Manor",
+			"definition": "The lord's estate, the heart of the medieval economy, a self-sufficient world where peasants produced most of what they needed."
+		},
+		{
+			"term": "Typical Manor",
+			"definition": "Included a village, water mill, church, and a manor house."
+		},
+		{
+			"term": "Manor",
+			"definition": "A large estate with fields, rivers, forts, vineyards, orchards, blacksmiths, mills, graveyards, gallows, and barns."
+		},
+		{
+			"term": "Fields",
+			"definition": "Divided into strips with one field left fallow each year to restore soil fertility."
+		},
+		{
+			"term": "Guilds",
+			"definition": "Associations of people with the same trade or craft, such as weavers, bakers, and sword makers."
+		},
+		{
+			"term": "Guild Membership",
+			"definition": "To join a guild, one had to serve as an apprentice for several years, often starting at age seven or eight."
+		},
+		{
+			"term": "Universities",
+			"definition": "Institutions arising from the need for educated clergy, literate rulers, and skilled middle-class professionals."
+		},
+		{
+			"term": "Charter",
+			"definition": "A written document outlining the rights and privileges of a town, often granted by a lord or king."
+		},
+		{
+			"term": "Medieval Towns",
+			"definition": "Centers of trade and handicraft that grew with revived trade, offering opportunities for serfs to gain freedom."
+		},
+		{
+			"term": "New Business Practices",
+			"definition": "Use of money, borrowing, and investing led to banking and weakened serfdom."
+		},
+		{
+			"term": "Canon Law",
+			"definition": "The Church's set of laws governing religious doctrine, clergy conduct, and moral issues."
+		},
+		{
+			"term": "Common Law",
+			"definition": "A secular legal system, indicating a plan to create a unified legal code and use juries/courts."
+		},
+		{
+			"term": "Magna Carta",
+			"definition": "A charter forced upon the English monarch by nobles, recognizing their rights and ensuring the monarch must obey laws."
+		},
+		{
+			"term": "Black Death",
+			"definition": "A plague from the Middle East that reached Europe via trading ships, killing 1/3 of the population and causing societal upheaval."
+		},
+		{
+			"term": "Pope",
+			"definition": "The head of the Catholic Church and ruler of the Papal States, believed to have authority over secular rulers."
+		},
+		{
+			"term": "Cathedrals",
+			"definition": "Gothic churches with large naves, relics, sculptures, rose windows, spires, and flying buttresses."
+		},
+		{
+			"term": "Chivalry",
+			"definition": "A knightly code emphasizing bravery, loyalty, honesty, and protection of the weak, especially women."
+		},
+		{
+			"term": "Feudal Pyramid",
+			"definition": "A social hierarchy with the monarch at the top, followed by upper lords, lower lords, knights, and serfs at the bottom."
+		},
+		{
+			"term": "Monarchs' Power Plans",
+			"definition": "Efforts to increase power by maintaining good relations with the Pope, building armies, expanding courts, and efficient taxation."
+		}
+	],
+	"quizletUrl": "https://quizlet.com/986765160/key-elements-of-the-medieval-world-flash-cards/"
+}
