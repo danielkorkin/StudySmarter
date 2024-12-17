@@ -4,12 +4,23 @@
 import { useState, useEffect, use } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Shuffle, ChevronLeft, ChevronRight, FlipVertical } from "lucide-react";
+import {
+	Shuffle,
+	ChevronLeft,
+	ChevronRight,
+	FlipVertical,
+	ExternalLink,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Flashcard {
 	term: string;
 	definition: string;
+}
+
+interface FlashcardData {
+	cards: Flashcard[];
+	quizletUrl?: string;
 }
 
 interface Props {
@@ -24,6 +35,7 @@ interface Props {
 export default function FlashcardPage(props: Props) {
 	const params = use(props.params);
 	const [cards, setCards] = useState<Flashcard[]>([]);
+	const [quizletUrl, setQuizletUrl] = useState<string | null>(null);
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [currentCard, setCurrentCard] = useState<Flashcard | null>(null);
 	const [isFlipped, setIsFlipped] = useState(false);
@@ -43,9 +55,10 @@ export default function FlashcardPage(props: Props) {
 						`${subjectId}/${courseId}/${unitId}/resources/flashcard_${resourceId}.json`,
 					)}`,
 				);
-				const data = await response.json();
+				const data: FlashcardData = await response.json();
 				setCards(data.cards);
 				setCurrentCard(data.cards[0]);
+				setQuizletUrl(data.quizletUrl || null);
 			} catch (err) {
 				console.error("Error loading flashcards:", err);
 			} finally {
@@ -133,9 +146,26 @@ export default function FlashcardPage(props: Props) {
 		<div className="max-w-4xl mx-auto space-y-4">
 			<Card>
 				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-					<CardTitle className="capitalize">
-						{resourceId.replace(/\b\w/g, (l) => l.toUpperCase())}
-					</CardTitle>
+					<div className="flex items-center gap-4">
+						<CardTitle className="capitalize">
+							{resourceId.replace(/\b\w/g, (l) =>
+								l.toUpperCase(),
+							)}
+						</CardTitle>
+						{quizletUrl && (
+							<Button
+								variant="outline"
+								size="sm"
+								className="gap-2"
+								onClick={() =>
+									window.open(quizletUrl, "_blank")
+								}
+							>
+								<ExternalLink className="h-4 w-4" />
+								Open in Quizlet
+							</Button>
+						)}
+					</div>
 					<div className="text-sm text-muted-foreground">
 						{currentIndex + 1} / {cards.length}
 					</div>

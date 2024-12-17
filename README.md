@@ -179,7 +179,8 @@ Example structure:
 			"term": "Bit",
 			"definition": "The smallest unit of data, representing 0 or 1"
 		}
-	]
+	],
+	"quizletUrl": "https://quizlet.com/your-flashcard-set" // Optional: Link to Quizlet set
 }
 ```
 
