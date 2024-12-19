@@ -8,6 +8,9 @@ import "katex/dist/katex.min.css";
 export const metadata: Metadata = {
 	title: "StudySmarter",
 	description: "A place with notes for studying",
+	verification: {
+		google: "BqPVn2qZSE5hPv9Delq3GZ5k_y93MN2FItOMFDxTvGc",
+	},
 };
 
 export default function RootLayout({
