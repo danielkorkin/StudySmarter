@@ -8,15 +8,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
 		const urlParts = route.url.split("/").filter(Boolean);
 		const depth = urlParts.length;
 
-		// Set priority based on depth
-		let priority = 1.0; // Default for homepage
-		if (depth === 1)
-			priority = 0.9; // Subject pages
-		else if (depth === 2)
-			priority = 0.8; // Course pages
-		else if (depth === 3)
-			priority = 0.7; // Unit pages
-		else if (depth > 3) priority = 0.6; // Resource pages
+		// Higher priorities for top-level pages
+		let priority: number;
+		switch (depth) {
+			case 0: // Homepage
+				priority = 1.0;
+				break;
+			case 1: // Subject pages (e.g. /computer-science)
+				priority = 0.9;
+				break;
+			case 2: // Course pages (e.g. /computer-science/ecs-1)
+				priority = 0.8;
+				break;
+			case 3: // Unit pages (e.g. /computer-science/ecs-1/unit-4)
+				priority = 0.7;
+				break;
+			default: // Resource pages
+				priority = 0.6;
+		}
 
 		return {
 			url: route.url,
