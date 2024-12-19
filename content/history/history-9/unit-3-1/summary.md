@@ -3,6 +3,7 @@ title: "Unit 3 (Part 1): The Medieval Ages"
 subjectId: "history"
 courseId: "history-9"
 unitId: "unit-3-1"
+lastModified: "2024-12-18T03:01:23.000Z"
 ---
 
 **The Medieval Period**, also known as the Middle Ages, spanned from approximately 500 to 1500 CE, marking a transformative era in European history. It was a time of significant change, characterized by both conflict and innovation.
