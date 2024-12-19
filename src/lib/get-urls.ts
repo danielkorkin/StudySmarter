@@ -12,7 +12,7 @@ interface ModifiedDates {
 }
 
 export function getAllUrls(
-	baseUrl: string = "https://studysmarter.pages.dev",
+	baseUrl: string = "https://studysmarter-web.vercel.app",
 ): Route[] {
 	const contentDir = path.join(process.cwd(), "content");
 	const routes: Route[] = [];
