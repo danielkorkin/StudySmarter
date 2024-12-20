@@ -200,6 +200,36 @@ Example structure:
 
 Only YouTube URLs are supported. The `startTime` field is optional and specifies where the video should start playing from in seconds.
 
+### Quiz Resources
+
+Create a JSON file:
+`content/[subject]/[course]/[unit]/resources/quiz_[name].json`
+
+Example structure:
+
+```json
+{
+  "questions": [
+    {
+      "question": "What is a bit?",
+      "type": "text",
+      "correctAnswers": ["The smallest unit of data"]
+    },
+    {
+      "question": "What number system is used in computers?",
+      "type": "multiple-choice",
+      "options": ["Binary", "Decimal", "Hexadecimal"],
+      "correctAnswers": ["Binary"]
+    },
+    {
+      "question": "Select all valid logic gates:",
+      "type": "checkboxes",
+      "options": ["AND", "OR", "XOR", "MAYBE", "NOT"],
+      "correctAnswers": ["AND", "OR", "XOR", "NOT"]
+    }
+  ]
+}
+
 ## File Naming Conventions
 
 -   Use lowercase letters
@@ -209,6 +239,10 @@ Only YouTube URLs are supported. The `startTime` field is optional and specifies
     -   `pdf_`
     -   `link_`
     -   `excalidraw_`
+	-	`flashcard_`
+	-	`podcast_`
+	-	`quiz_`
+	-	`video_`
 
 ## Example Directory Structure
 
@@ -230,6 +264,8 @@ math/
 algebra/
 unit1/
 pdf_practice.pdf
+
+```
 
 ```
 
