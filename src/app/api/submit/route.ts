@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+import { mkdir } from "fs/promises";
 import { Octokit } from "@octokit/rest";
 import { NextResponse } from "next/server";
 
@@ -7,10 +10,34 @@ const octokit = new Octokit({
 
 export async function POST(req: Request) {
 	try {
-		const { path, content, subject, course, unit, resourceType, name } =
-			await req.json();
+		const {
+			path: filePath,
+			content,
+			subject,
+			course,
+			unit,
+			resourceType,
+			name,
+			createSummaries,
+		} = await req.json();
 
-		// Create a new branch
+		// Ensure directory exists
+		const dir = path.dirname(filePath);
+		await mkdir(dir, { recursive: true });
+
+		// Create resource file locally
+		fs.writeFileSync(filePath, content);
+
+		// Create missing summary files locally
+		for (const [type, summary] of Object.entries(createSummaries)) {
+			const summaryPath = summary.path;
+			if (!fs.existsSync(summaryPath)) {
+				await mkdir(path.dirname(summaryPath), { recursive: true });
+				fs.writeFileSync(summaryPath, summary.content);
+			}
+		}
+
+		// Create GitHub PR
 		const timestamp = Date.now();
 		const branchName = `resource/${subject}-${course}-${unit}-${name}-${timestamp}`;
 
@@ -29,15 +56,27 @@ export async function POST(req: Request) {
 			sha: ref.object.sha,
 		});
 
-		// Create/update file in new branch
+		// Create/update resource file in new branch
 		await octokit.repos.createOrUpdateFileContents({
 			owner: "danielkorkin",
 			repo: "StudySmarter",
-			path,
+			path: filePath,
 			message: `Add ${resourceType} resource: ${name}`,
 			content: Buffer.from(content).toString("base64"),
 			branch: branchName,
 		});
+
+		// Create/update summary files in new branch
+		for (const [type, summary] of Object.entries(createSummaries)) {
+			await octokit.repos.createOrUpdateFileContents({
+				owner: "danielkorkin",
+				repo: "StudySmarter",
+				path: summary.path,
+				message: `Add ${type} summary for ${name}`,
+				content: Buffer.from(summary.content).toString("base64"),
+				branch: branchName,
+			});
+		}
 
 		// Create pull request
 		await octokit.pulls.create({

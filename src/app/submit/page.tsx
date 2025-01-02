@@ -29,13 +29,28 @@ export default function SubmitPage() {
 		e.preventDefault();
 		setIsLoading(true);
 
-		const formattedName = name.toLowerCase().replace(/\s+/g, "-");
-		const prefix = resourceType === "link" ? "link_" : "text_";
-		const extension = resourceType === "link" ? ".txt" : ".md";
-		const fileName = `${prefix}${formattedName}${extension}`;
-		const filePath = `content/${subject}/${course}/${unit}/resources/${fileName}`;
-
 		try {
+			// Normalize names to match existing format
+			const normalizedSubject = subject
+				.toLowerCase()
+				.replace(/\s+/g, "-");
+			const normalizedCourse = course.toLowerCase().replace(/\s+/g, "-");
+			const normalizedUnit = unit.toLowerCase().replace(/\s+/g, "-");
+			const formattedName = name.toLowerCase().replace(/\s+/g, "-");
+
+			// Prepare paths
+			const basePath = `content/${normalizedSubject}/${normalizedCourse}/${normalizedUnit}`;
+			const subjectSummaryPath = `content/${normalizedSubject}/summary.md`;
+			const courseSummaryPath = `content/${normalizedSubject}/${normalizedCourse}/summary.md`;
+			const unitSummaryPath = `${basePath}/summary.md`;
+
+			// Create resource file
+			const prefix = resourceType === "link" ? "link_" : "text_";
+			const extension = resourceType === "link" ? ".txt" : ".md";
+			const fileName = `${prefix}${formattedName}${extension}`;
+			const filePath = `${basePath}/resources/${fileName}`;
+
+			// Submit resource and create summaries
 			const response = await fetch("/api/submit", {
 				method: "POST",
 				headers: {
@@ -44,11 +59,37 @@ export default function SubmitPage() {
 				body: JSON.stringify({
 					path: filePath,
 					content,
-					subject,
-					course,
-					unit,
+					subject: normalizedSubject,
+					course: normalizedCourse,
+					unit: normalizedUnit,
 					resourceType,
 					name: formattedName,
+					createSummaries: {
+						subject: {
+							path: subjectSummaryPath,
+							content: `---
+title: "${subject}"
+---`,
+						},
+						course: {
+							path: courseSummaryPath,
+							content: `---
+title: "${course}"
+subjectId: "${normalizedSubject}"
+courseId: "${normalizedCourse}"
+---`,
+						},
+						unit: {
+							path: unitSummaryPath,
+							content: `---
+title: "${unit}"
+subjectId: "${normalizedSubject}"
+courseId: "${normalizedCourse}"
+unitId: "${normalizedUnit}"
+lastModified: "${new Date().toISOString()}"
+---`,
+						},
+					},
 				}),
 			});
 
