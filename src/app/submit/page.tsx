@@ -212,7 +212,8 @@ lastModified: "${new Date().toISOString()}"
 													setCustomSubject("");
 												}}
 											>
-												Create "{customSubject}"
+												Create &quot;{customSubject}
+												&quot;
 											</Button>
 										)}
 									</CommandEmpty>
@@ -290,7 +291,8 @@ lastModified: "${new Date().toISOString()}"
 													setCustomCourse("");
 												}}
 											>
-												Create "{customCourse}"
+												Create &quot;{customCourse}
+												&quot;
 											</Button>
 										)}
 									</CommandEmpty>
@@ -372,7 +374,7 @@ lastModified: "${new Date().toISOString()}"
 													setCustomUnit("");
 												}}
 											>
-												Create "{customUnit}"
+												Create &quot;{customUnit}&quot;
 											</Button>
 										)}
 									</CommandEmpty>
