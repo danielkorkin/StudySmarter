@@ -1,11 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2 } from "lucide-react";
+import { Loader2, Check, ChevronsUpDown } from "lucide-react";
+import {
+	Command,
+	CommandEmpty,
+	CommandGroup,
+	CommandInput,
+	CommandItem,
+	CommandList,
+} from "@/components/ui/command";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
 import {
 	Select,
 	SelectContent,
@@ -13,6 +26,13 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+
+interface ExistingPaths {
+	subjects: string[];
+	courses: { [subject: string]: string[] };
+	units: { [course: string]: string[] };
+}
 
 export default function SubmitPage() {
 	const [resourceType, setResourceType] = useState<"link" | "markdown">(
@@ -24,13 +44,32 @@ export default function SubmitPage() {
 	const [name, setName] = useState("");
 	const [content, setContent] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
+	const [existingPaths, setExistingPaths] = useState<ExistingPaths>({
+		subjects: [],
+		courses: {},
+		units: {},
+	});
+	const [openSubject, setOpenSubject] = useState(false);
+	const [openCourse, setOpenCourse] = useState(false);
+	const [openUnit, setOpenUnit] = useState(false);
+	const [customSubject, setCustomSubject] = useState("");
+	const [customCourse, setCustomCourse] = useState("");
+	const [customUnit, setCustomUnit] = useState("");
+
+	useEffect(() => {
+		const fetchExistingPaths = async () => {
+			const response = await fetch("/api/paths");
+			const data = await response.json();
+			setExistingPaths(data);
+		};
+		fetchExistingPaths();
+	}, []);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setIsLoading(true);
 
 		try {
-			// Normalize names to match existing format
 			const normalizedSubject = subject
 				.toLowerCase()
 				.replace(/\s+/g, "-");
@@ -38,19 +77,16 @@ export default function SubmitPage() {
 			const normalizedUnit = unit.toLowerCase().replace(/\s+/g, "-");
 			const formattedName = name.toLowerCase().replace(/\s+/g, "-");
 
-			// Prepare paths
 			const basePath = `content/${normalizedSubject}/${normalizedCourse}/${normalizedUnit}`;
 			const subjectSummaryPath = `content/${normalizedSubject}/summary.md`;
 			const courseSummaryPath = `content/${normalizedSubject}/${normalizedCourse}/summary.md`;
 			const unitSummaryPath = `${basePath}/summary.md`;
 
-			// Create resource file
 			const prefix = resourceType === "link" ? "link_" : "text_";
 			const extension = resourceType === "link" ? ".txt" : ".md";
 			const fileName = `${prefix}${formattedName}${extension}`;
 			const filePath = `${basePath}/resources/${fileName}`;
 
-			// Submit resource and create summaries
 			const response = await fetch("/api/submit", {
 				method: "POST",
 				headers: {
@@ -67,35 +103,21 @@ export default function SubmitPage() {
 					createSummaries: {
 						subject: {
 							path: subjectSummaryPath,
-							content: `---
-title: "${subject}"
----`,
+							content: `---\ntitle: "${subject}"\n---`,
 						},
 						course: {
 							path: courseSummaryPath,
-							content: `---
-title: "${course}"
-subjectId: "${normalizedSubject}"
-courseId: "${normalizedCourse}"
----`,
+							content: `---\ntitle: "${course}"\nsubjectId: "${normalizedSubject}"\ncourseId: "${normalizedCourse}"\n---`,
 						},
 						unit: {
 							path: unitSummaryPath,
-							content: `---
-title: "${unit}"
-subjectId: "${normalizedSubject}"
-courseId: "${normalizedCourse}"
-unitId: "${normalizedUnit}"
-lastModified: "${new Date().toISOString()}"
----`,
+							content: `---\ntitle: "${unit}"\nsubjectId: "${normalizedSubject}"\ncourseId: "${normalizedCourse}"\nunitId: "${normalizedUnit}"\nlastModified: "${new Date().toISOString()}"\n---`,
 						},
 					},
 				}),
 			});
 
 			if (!response.ok) throw new Error("Submission failed");
-
-			// Reset form
 			setName("");
 			setContent("");
 		} catch (error) {
@@ -128,29 +150,239 @@ lastModified: "${new Date().toISOString()}"
 						</SelectContent>
 					</Select>
 
-					<Input
-						placeholder="Subject"
-						value={subject}
-						onChange={(e) => setSubject(e.target.value)}
-						required
-						disabled={isLoading}
-					/>
+					<Popover open={openSubject} onOpenChange={setOpenSubject}>
+						<PopoverTrigger asChild>
+							<Button
+								variant="outline"
+								role="combobox"
+								aria-expanded={openSubject}
+								className="w-full justify-between"
+								disabled={isLoading}
+							>
+								{subject || "Select subject..."}
+								<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent className="w-full p-0">
+							<Command>
+								<CommandInput
+									placeholder="Search subject..."
+									value={customSubject}
+									onValueChange={setCustomSubject}
+								/>
+								<CommandList>
+									<CommandEmpty>
+										{customSubject && (
+											<Button
+												variant="ghost"
+												className="w-full justify-start"
+												onClick={() => {
+													setSubject(customSubject);
+													setExistingPaths(
+														(prev) => ({
+															...prev,
+															subjects: [
+																...prev.subjects,
+																customSubject,
+															],
+														}),
+													);
+													setOpenSubject(false);
+													setCustomSubject("");
+												}}
+											>
+												Create "{customSubject}"
+											</Button>
+										)}
+									</CommandEmpty>
+									<CommandGroup>
+										{existingPaths.subjects.map((item) => (
+											<CommandItem
+												key={item}
+												value={item}
+												onSelect={(value) => {
+													setSubject(value);
+													setOpenSubject(false);
+												}}
+											>
+												<Check
+													className={cn(
+														"mr-2 h-4 w-4",
+														subject === item
+															? "opacity-100"
+															: "opacity-0",
+													)}
+												/>
+												{item}
+											</CommandItem>
+										))}
+									</CommandGroup>
+								</CommandList>
+							</Command>
+						</PopoverContent>
+					</Popover>
 
-					<Input
-						placeholder="Course"
-						value={course}
-						onChange={(e) => setCourse(e.target.value)}
-						required
-						disabled={isLoading}
-					/>
+					<Popover open={openCourse} onOpenChange={setOpenCourse}>
+						<PopoverTrigger asChild>
+							<Button
+								variant="outline"
+								role="combobox"
+								aria-expanded={openCourse}
+								className="w-full justify-between"
+								disabled={isLoading || !subject}
+							>
+								{course || "Select course..."}
+								<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent className="w-full p-0">
+							<Command>
+								<CommandInput
+									placeholder="Search course..."
+									value={customCourse}
+									onValueChange={setCustomCourse}
+								/>
+								<CommandList>
+									<CommandEmpty>
+										{customCourse && (
+											<Button
+												variant="ghost"
+												className="w-full justify-start"
+												onClick={() => {
+													setCourse(customCourse);
+													setExistingPaths(
+														(prev) => ({
+															...prev,
+															courses: {
+																...prev.courses,
+																[subject]: [
+																	...(prev
+																		.courses[
+																		subject
+																	] || []),
+																	customCourse,
+																],
+															},
+														}),
+													);
+													setOpenCourse(false);
+													setCustomCourse("");
+												}}
+											>
+												Create "{customCourse}"
+											</Button>
+										)}
+									</CommandEmpty>
+									<CommandGroup>
+										{existingPaths.courses[subject]?.map(
+											(item) => (
+												<CommandItem
+													key={item}
+													value={item}
+													onSelect={(value) => {
+														setCourse(value);
+														setOpenCourse(false);
+													}}
+												>
+													<Check
+														className={cn(
+															"mr-2 h-4 w-4",
+															course === item
+																? "opacity-100"
+																: "opacity-0",
+														)}
+													/>
+													{item}
+												</CommandItem>
+											),
+										)}
+									</CommandGroup>
+								</CommandList>
+							</Command>
+						</PopoverContent>
+					</Popover>
 
-					<Input
-						placeholder="Unit"
-						value={unit}
-						onChange={(e) => setUnit(e.target.value)}
-						required
-						disabled={isLoading}
-					/>
+					<Popover open={openUnit} onOpenChange={setOpenUnit}>
+						<PopoverTrigger asChild>
+							<Button
+								variant="outline"
+								role="combobox"
+								aria-expanded={openUnit}
+								className="w-full justify-between"
+								disabled={isLoading || !subject || !course}
+							>
+								{unit || "Select unit..."}
+								<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent className="w-full p-0">
+							<Command>
+								<CommandInput
+									placeholder="Search unit..."
+									value={customUnit}
+									onValueChange={setCustomUnit}
+								/>
+								<CommandList>
+									<CommandEmpty>
+										{customUnit && (
+											<Button
+												variant="ghost"
+												className="w-full justify-start"
+												onClick={() => {
+													setUnit(customUnit);
+													setExistingPaths(
+														(prev) => ({
+															...prev,
+															units: {
+																...prev.units,
+																[`${subject}/${course}`]:
+																	[
+																		...(prev
+																			.units[
+																			`${subject}/${course}`
+																		] ||
+																			[]),
+																		customUnit,
+																	],
+															},
+														}),
+													);
+													setOpenUnit(false);
+													setCustomUnit("");
+												}}
+											>
+												Create "{customUnit}"
+											</Button>
+										)}
+									</CommandEmpty>
+									<CommandGroup>
+										{existingPaths.units[
+											`${subject}/${course}`
+										]?.map((item) => (
+											<CommandItem
+												key={item}
+												value={item}
+												onSelect={(value) => {
+													setUnit(value);
+													setOpenUnit(false);
+												}}
+											>
+												<Check
+													className={cn(
+														"mr-2 h-4 w-4",
+														unit === item
+															? "opacity-100"
+															: "opacity-0",
+													)}
+												/>
+												{item}
+											</CommandItem>
+										))}
+									</CommandGroup>
+								</CommandList>
+							</Command>
+						</PopoverContent>
+					</Popover>
 
 					<Input
 						placeholder="Resource Name"
