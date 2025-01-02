@@ -9,7 +9,15 @@ export default function Navbar() {
 					<Link href="/" className="text-2xl font-bold">
 						StudySmarter
 					</Link>
-					<ModeToggle />
+					<div className="flex items-center space-x-4">
+						<Link
+							href="/submit"
+							className="px-4 py-2 rounded-md hover:bg-muted transition-colors duration-200"
+						>
+							Submit
+						</Link>
+						<ModeToggle />
+					</div>
 				</div>
 			</div>
 		</nav>

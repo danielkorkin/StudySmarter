@@ -35,14 +35,15 @@ interface ExistingPaths {
 }
 
 export default function SubmitPage() {
-	const [resourceType, setResourceType] = useState<"link" | "markdown">(
-		"link",
-	);
+	const [resourceType, setResourceType] = useState<
+		"link" | "markdown" | "video"
+	>("link");
 	const [subject, setSubject] = useState("");
 	const [course, setCourse] = useState("");
 	const [unit, setUnit] = useState("");
 	const [name, setName] = useState("");
 	const [content, setContent] = useState("");
+	const [startTime, setStartTime] = useState<number>(0);
 	const [isLoading, setIsLoading] = useState(false);
 	const [existingPaths, setExistingPaths] = useState<ExistingPaths>({
 		subjects: [],
@@ -80,10 +81,32 @@ export default function SubmitPage() {
 			const basePath = `content/${normalizedSubject}/${normalizedCourse}/${normalizedUnit}`;
 			const unitSummaryPath = `${basePath}/summary.md`;
 
-			const prefix = resourceType === "link" ? "link_" : "text_";
-			const extension = resourceType === "link" ? ".txt" : ".md";
+			const prefix =
+				resourceType === "link"
+					? "link_"
+					: resourceType === "video"
+						? "video_"
+						: "text_";
+			const extension =
+				resourceType === "video"
+					? ".json"
+					: resourceType === "link"
+						? ".txt"
+						: ".md";
 			const fileName = `${prefix}${formattedName}${extension}`;
 			const filePath = `${basePath}/resources/${fileName}`;
+
+			const fileContent =
+				resourceType === "video"
+					? JSON.stringify(
+							{
+								youtubeUrl: content,
+								startTime: startTime || 0,
+							},
+							null,
+							2,
+						)
+					: content;
 
 			const response = await fetch("/api/submit", {
 				method: "POST",
@@ -92,7 +115,7 @@ export default function SubmitPage() {
 				},
 				body: JSON.stringify({
 					path: filePath,
-					content,
+					content: fileContent,
 					subject: normalizedSubject,
 					course: normalizedCourse,
 					unit: normalizedUnit,
@@ -116,6 +139,7 @@ lastModified: "${new Date().toISOString()}"
 			if (!response.ok) throw new Error("Submission failed");
 			setName("");
 			setContent("");
+			setStartTime(0);
 		} catch (error) {
 			console.error("Error submitting resource:", error);
 		} finally {
@@ -132,7 +156,7 @@ lastModified: "${new Date().toISOString()}"
 				<form onSubmit={handleSubmit} className="space-y-4">
 					<Select
 						value={resourceType}
-						onValueChange={(value: "link" | "markdown") =>
+						onValueChange={(value: "link" | "markdown" | "video") =>
 							setResourceType(value)
 						}
 						disabled={isLoading}
@@ -143,6 +167,7 @@ lastModified: "${new Date().toISOString()}"
 						<SelectContent>
 							<SelectItem value="link">Link</SelectItem>
 							<SelectItem value="markdown">Markdown</SelectItem>
+							<SelectItem value="video">Video</SelectItem>
 						</SelectContent>
 					</Select>
 
@@ -388,7 +413,30 @@ lastModified: "${new Date().toISOString()}"
 						disabled={isLoading}
 					/>
 
-					{resourceType === "markdown" ? (
+					{resourceType === "video" ? (
+						<>
+							<Input
+								placeholder="YouTube URL"
+								value={content}
+								onChange={(e) => setContent(e.target.value)}
+								required
+								type="url"
+								pattern="^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]{11}.*$"
+								title="Please enter a valid YouTube URL"
+								disabled={isLoading}
+							/>
+							<Input
+								placeholder="Start Time (seconds)"
+								type="number"
+								min="0"
+								value={startTime}
+								onChange={(e) =>
+									setStartTime(parseInt(e.target.value) || 0)
+								}
+								disabled={isLoading}
+							/>
+						</>
+					) : resourceType === "markdown" ? (
 						<Textarea
 							placeholder="Enter markdown content..."
 							value={content}
