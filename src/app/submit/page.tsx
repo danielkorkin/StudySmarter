@@ -78,8 +78,6 @@ export default function SubmitPage() {
 			const formattedName = name.toLowerCase().replace(/\s+/g, "-");
 
 			const basePath = `content/${normalizedSubject}/${normalizedCourse}/${normalizedUnit}`;
-			const subjectSummaryPath = `content/${normalizedSubject}/summary.md`;
-			const courseSummaryPath = `content/${normalizedSubject}/${normalizedCourse}/summary.md`;
 			const unitSummaryPath = `${basePath}/summary.md`;
 
 			const prefix = resourceType === "link" ? "link_" : "text_";
@@ -101,17 +99,15 @@ export default function SubmitPage() {
 					resourceType,
 					name: formattedName,
 					createSummaries: {
-						subject: {
-							path: subjectSummaryPath,
-							content: `---\ntitle: "${subject}"\n---`,
-						},
-						course: {
-							path: courseSummaryPath,
-							content: `---\ntitle: "${course}"\nsubjectId: "${normalizedSubject}"\ncourseId: "${normalizedCourse}"\n---`,
-						},
 						unit: {
 							path: unitSummaryPath,
-							content: `---\ntitle: "${unit}"\nsubjectId: "${normalizedSubject}"\ncourseId: "${normalizedCourse}"\nunitId: "${normalizedUnit}"\nlastModified: "${new Date().toISOString()}"\n---`,
+							content: `---
+title: "${unit}"
+subjectId: "${normalizedSubject}"
+courseId: "${normalizedCourse}"
+unitId: "${normalizedUnit}"
+lastModified: "${new Date().toISOString()}"
+---`,
 						},
 					},
 				}),
