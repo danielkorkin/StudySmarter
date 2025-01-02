@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Loader2 } from "lucide-react";
 import {
 	Select,
 	SelectContent,
@@ -22,9 +23,11 @@ export default function SubmitPage() {
 	const [unit, setUnit] = useState("");
 	const [name, setName] = useState("");
 	const [content, setContent] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setIsLoading(true);
 
 		const formattedName = name.toLowerCase().replace(/\s+/g, "-");
 		const prefix = resourceType === "link" ? "link_" : "text_";
@@ -56,6 +59,8 @@ export default function SubmitPage() {
 			setContent("");
 		} catch (error) {
 			console.error("Error submitting resource:", error);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -71,6 +76,7 @@ export default function SubmitPage() {
 						onValueChange={(value: "link" | "markdown") =>
 							setResourceType(value)
 						}
+						disabled={isLoading}
 					>
 						<SelectTrigger>
 							<SelectValue placeholder="Select resource type" />
@@ -86,6 +92,7 @@ export default function SubmitPage() {
 						value={subject}
 						onChange={(e) => setSubject(e.target.value)}
 						required
+						disabled={isLoading}
 					/>
 
 					<Input
@@ -93,6 +100,7 @@ export default function SubmitPage() {
 						value={course}
 						onChange={(e) => setCourse(e.target.value)}
 						required
+						disabled={isLoading}
 					/>
 
 					<Input
@@ -100,6 +108,7 @@ export default function SubmitPage() {
 						value={unit}
 						onChange={(e) => setUnit(e.target.value)}
 						required
+						disabled={isLoading}
 					/>
 
 					<Input
@@ -107,6 +116,7 @@ export default function SubmitPage() {
 						value={name}
 						onChange={(e) => setName(e.target.value)}
 						required
+						disabled={isLoading}
 					/>
 
 					{resourceType === "markdown" ? (
@@ -116,6 +126,7 @@ export default function SubmitPage() {
 							onChange={(e) => setContent(e.target.value)}
 							required
 							className="min-h-[200px]"
+							disabled={isLoading}
 						/>
 					) : (
 						<Input
@@ -124,10 +135,20 @@ export default function SubmitPage() {
 							onChange={(e) => setContent(e.target.value)}
 							required
 							type="url"
+							disabled={isLoading}
 						/>
 					)}
 
-					<Button type="submit">Submit</Button>
+					<Button type="submit" disabled={isLoading}>
+						{isLoading ? (
+							<>
+								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+								Submitting...
+							</>
+						) : (
+							"Submit"
+						)}
+					</Button>
 				</form>
 			</CardContent>
 		</Card>
